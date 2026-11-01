@@ -1,9 +1,9 @@
-const CACHE='mon-batch-v3';
+const CACHE='mon-batch-v4';
 const CORE=['./index.html','./manifest.json','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
   for(const path of CORE){
-    const response=await fetch(path+'?refresh=3',{cache:'reload'});
+    const response=await fetch(path+'?refresh=4',{cache:'reload'});
     if(response.ok)await cache.put(path,response.clone());
   }
   await self.skipWaiting();
