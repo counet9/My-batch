@@ -1,20 +1,17 @@
-MON BATCH — mise à jour photos et portions généreuses
+MON BATCH — VERSION CORRIGÉE
 
-MODIFICATIONS
-- Les 50 recettes affichent maintenant une vraie photo au lieu d'un emoji.
-- Les 19 plats favoris visibles dans tes captures utilisent leurs photos correspondantes.
-- Pour les autres recettes, une photo proche du type de plat est attribuée ; certaines photos sont donc réutilisées.
-- Les quantités sont calculées en grandes portions : par défaut, 2 personnes pendant 2 jours = 4 grandes portions par recette.
-- Dans « Mon batch », ajuste séparément le nombre de personnes et le nombre de jours pour chaque recette ; les ingrédients et la liste de courses se recalculent automatiquement.
-- Le reste de l'application est conservé : favoris, ajout de recettes, courses, cases à cocher, minuteur, mode cuisine et stockage local.
+CE QUI CHANGE
+- Les fiches de recettes affichent de vraies photos intégrées à l’application, au lieu des emojis. Les 19 plats favoris correspondent aux photos des captures fournies ; certaines photos sont réutilisées pour les autres recettes.
+- Dans « Mon batch », chaque recette possède maintenant deux réglages distincts : « Nombre de personnes » et « Nombre de jours ».
+- Réglage initial : 2 personnes pendant 2 jours (4 grandes portions). Tu peux changer les deux nombres indépendamment pour chaque plat : 1 personne pendant 3 jours, 2 personnes pendant 3 jours, etc.
+- Les ingrédients et la liste de courses sont recalculés en fonction des personnes × jours.
+- Le cache de l’application est renouvelé pour que l’iPhone charge cette nouvelle version au lieu de l’ancienne.
 
-MISE À JOUR SUR GITHUB
-1. Ouvre ton dépôt GitHub « mon-batch ».
-2. Remplace seulement index.html et service-worker.js par les fichiers de cette version. Toutes les photos sont intégrées directement dans index.html : aucun dossier photo supplémentaire n'est nécessaire.
-3. Attends la fin du déploiement GitHub Pages.
-4. Sur l'iPhone, ferme complètement Mon Batch, ouvre l'adresse du site dans Safari et actualise-la, puis relance Mon Batch depuis l'écran d'accueil.
+IMPORTATION
+1. Décompresse cette archive.
+2. Importe les 5 fichiers à la racine de ton dépôt GitHub : index.html, manifest.json, service-worker.js, icon.svg et README.txt.
+3. Attends que GitHub Pages termine le déploiement.
+4. Ouvre l’adresse du site dans Safari et actualise. Ferme ensuite complètement l’application installée sur l’écran d’accueil et relance-la.
 
-À SAVOIR
-- Les fiches de départ sont des versions adaptées, pas des copies vérifiées des fiches originales de Basta.
-- Les ingrédients de base correspondent à 4 grandes portions. Les valeurs nutritionnelles sont estimées par grande portion.
-- Les recettes et favoris enregistrés dans le stockage local sont conservés lors de cette mise à jour.
+Les photos sont incorporées dans index.html : aucun dossier photo supplémentaire n’est nécessaire.
+Les recettes et favoris enregistrés localement sont conservés. Les réglages de batch déjà présents sont gardés lorsqu’ils contiennent déjà un nombre de personnes et de jours ; les anciens éléments à portions seules démarrent à 2 personnes × 2 jours.
