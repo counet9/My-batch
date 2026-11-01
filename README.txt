@@ -1,17 +1,20 @@
-MON BATCH — première version
+MON BATCH — mise à jour photos et portions généreuses
 
-CONTENU
-- index.html : application complète, interface mobile et logique.
-- manifest.json : configuration installable PWA.
-- service-worker.js : mise en cache hors-ligne.
+MODIFICATIONS
+- Les 50 recettes affichent maintenant une vraie photo au lieu d'un emoji.
+- Les 19 plats favoris visibles dans tes captures utilisent leurs photos correspondantes.
+- Pour les autres recettes, une photo proche du type de plat est attribuée ; certaines photos sont donc réutilisées.
+- Les quantités sont calculées en grandes portions : par défaut, 2 personnes pendant 2 jours = 4 grandes portions par recette.
+- Dans « Mon batch », ajuste séparément le nombre de personnes et le nombre de jours pour chaque recette ; les ingrédients et la liste de courses se recalculent automatiquement.
+- Le reste de l'application est conservé : favoris, ajout de recettes, courses, cases à cocher, minuteur, mode cuisine et stockage local.
 
-UTILISATION RAPIDE
-1. Ouvre index.html dans un navigateur pour tester l'application.
-2. Pour l'installation PWA sur iPhone, héberge le dossier sur une adresse HTTPS (par exemple GitHub Pages), puis ouvre le site dans Safari > Partager > Sur l'écran d'accueil.
-3. Les recettes ajoutées, favoris, sélections et cases cochées sont enregistrés dans le stockage local du navigateur sur cet appareil.
+MISE À JOUR SUR GITHUB
+1. Ouvre ton dépôt GitHub « mon-batch ».
+2. Remplace seulement index.html et service-worker.js par les fichiers de cette version. Toutes les photos sont intégrées directement dans index.html : aucun dossier photo supplémentaire n'est nécessaire.
+3. Attends la fin du déploiement GitHub Pages.
+4. Sur l'iPhone, ferme complètement Mon Batch, ouvre l'adresse du site dans Safari et actualise-la, puis relance Mon Batch depuis l'écran d'accueil.
 
 À SAVOIR
-- 50 recettes de départ sont incluses. Les fiches sont des versions adaptées créées pour l'application, pas des copies vérifiées des fiches Basta.
-- Les quantités des recettes de départ correspondent à 4 portions standard. Les valeurs nutritionnelles sont estimatives par portion standard.
-- Cette version fonctionne sans compte ni serveur. Les données locales ne se synchronisent pas encore automatiquement entre plusieurs appareils. Une synchronisation cloud (par exemple Supabase) constitue l'étape suivante.
-- Pour une conservation correcte des données, ne pas effacer les données du site dans les réglages du navigateur.
+- Les fiches de départ sont des versions adaptées, pas des copies vérifiées des fiches originales de Basta.
+- Les ingrédients de base correspondent à 4 grandes portions. Les valeurs nutritionnelles sont estimées par grande portion.
+- Les recettes et favoris enregistrés dans le stockage local sont conservés lors de cette mise à jour.
