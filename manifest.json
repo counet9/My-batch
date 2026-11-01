@@ -1,0 +1,12 @@
+{
+  "name": "Mon Batch — Batch cooking personnel",
+  "short_name": "Mon Batch",
+  "description": "Recettes, liste de courses et cuisine étape par étape.",
+  "lang": "fr-BE",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f4fa",
+  "theme_color": "#4016e8",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
