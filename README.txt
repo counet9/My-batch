@@ -1,36 +1,48 @@
-MON BATCH — VERSION RECETTES DÉTAILLÉES
+MON BATCH — VERSION 8 (RECETTES ET QUANTITÉS CORRIGÉES)
 
-CONTENU À PUBLIER (5 fichiers à la racine de GitHub Pages)
-- index.html : application, 50 fiches de recettes, favoris, recherche, batch, courses et mode cuisine.
+CONTENU DU ZIP — À EXTRAIRE À LA RACINE DU DÉPÔT GITHUB PAGES
+- index.html : application, 50 recettes, favoris, recherche, batch, courses et mode cuisine.
 - manifest.json : configuration PWA installable.
-- service-worker.js : cache hors-ligne avec nouvelle version de cache.
+- service-worker.js : cache v8, mise à jour réseau prioritaire pour les pages HTML et suppression des anciens caches Mon Batch.
 - icon.svg : icône de l’application.
 - README.txt : ces instructions.
 
-PORTIONS ET QUANTITÉS
-Les quantités d’une fiche sont prévues pour une personne et un dîner. Les viandes, poissons et légumes restent sur des quantités réalistes proches des fiches Basta ; seuls les féculents sont renforcés pour vos grandes portions. Dans « Mon batch », les ingrédients sont multipliés par le nombre de personnes × le nombre de jours. Le réglage initial est de 2 personnes pour 1 dîner ; les deux réglages restent indépendants.
+PORTIONS ET CALCUL DU BATCH
+Chaque fiche de recette est définie pour 1 personne et 1 dîner. La liste de courses calcule les quantités en multipliant chaque ingrédient une seule fois par personnes × jours.
+Exemple vérifié pour le poulet miso, 2 personnes × 3 jours (6 dîners) :
+- Blanc de poulet : 130 g × 6 = 780 g.
+- Brocoli : 150 g × 6 = 900 g.
+- Riz cru : 125 g × 6 = 750 g (au-dessus du minimum de 100 g par personne).
+- Ail : 1 gousse × 6 = 6 gousses.
+La fiche miso Basta ne contient ni oignon ni huile d’olive : elle reprend le miso, la sauce soja, le miel, l’huile de sésame, l’ail, la fécule, l’eau, le poivre, le poulet, le riz et le brocoli.
 
-Repères de féculents par personne et par dîner : environ 125 g de riz cru, 175 g de pâtes sèches (ajustables entre 150 et 200 g), 300 g de pommes de terre, 100 g de semoule sèche, 150 g de nouilles sèches et 250 g de gnocchis.
+REPÈRES DE FÉCULENTS PAR PERSONNE ET PAR DÎNER
+- Riz cru : 125 g par défaut (minimum demandé : 100 g).
+- Pâtes sèches : 175 g (dans la plage souhaitée de 150 à 200 g).
+- Nouilles sèches : 150 g.
+- Semoule sèche : 100 g.
+- Pommes de terre : environ 300 g.
+- Gnocchis : 250 g.
+Les quantités de viande, volaille et poisson restent des portions réalistes : généralement 120 à 130 g par personne, et environ 150 g pour le saumon, les saucisses ou certaines boulettes. Les légumes et les sauces restent liés à chaque recette ; ils ne sont pas doublés automatiquement.
 
-RECETTES
-Les 19 premières fiches reprennent les ingrédients et la préparation visibles sur tes captures. Aucun ingrédient supplémentaire n’est ajouté volontairement ; les féculents sont les seuls éléments renforcés. Les 31 autres fiches sont les recettes originales du catalogue Mon Batch. Chaque fiche comprend ingrédients, étapes, valeurs nutritionnelles estimées, coût estimé et conseils de conservation.
+LES RECETTES
+- Les 19 premières fiches correspondent aux 19 recettes Basta fournies en captures. Les ingrédients et les étapes sont repris de ces fiches. Les quantités de féculents sont adaptées aux grandes portions convenues ; les autres ingrédients restent ceux de la recette source.
+- Les 31 suivantes sont des créations Mon Batch, avec ingrédients, étapes détaillées, temps, macros estimées, budget indicatif et conseils de conservation.
+- Les recettes personnalisées restent enregistrées localement dans le navigateur.
+
+MODE CUISINE
+Les étapes reprennent la fiche de recette. Pour préparer l’ensemble d’un batch de plusieurs personnes ou jours, utilise les quantités totales de la liste de courses (personnes × jours). Les étapes sont conservées dans leur formulation d’origine et ne sont pas automatiquement réécrites à chaque changement de portion.
 
 PRIX ET NUTRITION
-Les coûts sont des estimations indicatives par repas généreux individuel, en euros, calibrées pour des achats courants en Belgique. Ce ne sont ni des prix en temps réel ni des prix garantis d’une enseigne. Les promotions, le magasin, la marque, la saison et les formats d’achat peuvent modifier le coût réel. La fiche indique également une estimation pour deux personnes ; le batch additionne selon les personnes et les jours.
-Repères de calibration consultés le 3 novembre 2026 : estimations de panier belge (Wise : poulet, bœuf, riz, pommes de terre et tomates) ; dépliant Colruyt valable du 21 octobre au 3 novembre 2026 ; prix en ligne Carrefour pour les pâtes et le riz. Ces références servent uniquement à établir un ordre de grandeur : le coût de chaque plat reste une estimation éditoriale.
-Les calories et macros sont également estimées, pas des données de laboratoire. Vérifie les étiquettes des produits pour des valeurs exactes.
-
-RECHERCHE
-Dans l’onglet Recettes, la barre de recherche filtre par nom, catégorie, ingrédient et préparation. Exemples : « poulet miso brocoli riz », « teriyaki », « aubergine » ou « semoule ».
+Les coûts sont des estimations indicatives en euros pour des achats courants en Belgique, non liées à un magasin précis et non garanties en temps réel. Les calories et macros sont également estimées ; elles varient selon les marques et les produits utilisés.
 
 MISE À JOUR SUR GITHUB PAGES
-1. Décompresse l’archive.
-2. Remplace les cinq fichiers de l’archive par les cinq fichiers actuels du dépôt, à la racine, sans créer de sous-dossier.
-3. Attends que GitHub Pages ait terminé le déploiement.
-4. Sur iPhone, ferme complètement l’application Mon Batch puis rouvre-la. Le service worker utilise un nouveau nom de cache pour charger cette version.
+1. Télécharge ce ZIP et décompresse-le.
+2. Dans le dépôt GitHub « My-batch », ouvre le dossier publié par GitHub Pages (normalement la racine si Pages est configuré sur /(root)).
+3. Remplace les cinq fichiers de la racine par les cinq fichiers du ZIP. Ne place pas les fichiers dans un sous-dossier.
+4. Vérifie que index.html, service-worker.js, manifest.json, icon.svg et README.txt sont bien à la racine.
+5. Attends la fin du déploiement GitHub Pages, puis ouvre l’adresse du site dans Safari et actualise-la. La version v8 utilise un nouveau cache et privilégie le réseau pour index.html ; l’ancien cache Mon Batch est supprimé lors de l’activation du nouveau service worker.
+6. Ferme puis rouvre le raccourci installé sur l’écran d’accueil. Si l’ancienne page persiste, ouvre d’abord le site dans un onglet Safari et actualise-le une fois.
 
 DONNÉES PERSONNELLES
-Les favoris, recettes ajoutées, sélections de batch et cases cochées restent stockés localement dans le navigateur. Ne supprime pas les données du site dans les réglages de Safari lors de la mise à jour.
-
-CORRECTION V3
-Les 19 recettes transmises en captures ont été retranscrites avec leurs ingrédients et étapes, sans ajout volontaire d’ingrédients. Les quantités de viande/poisson ne sont plus doublées : elles restent proches de 100 à 130 g par personne et par dîner. Exemple : 120 g de poulet × 2 personnes × 3 jours = 720 g. Les féculents sont adaptés séparément aux grandes portions. Le calcul du batch multiplie maintenant chaque ingrédient une seule fois par personnes × jours.
+Les favoris, recettes ajoutées, sélections de batch et cases cochées restent stockés localement dans le navigateur. La mise à jour ne demande pas d’effacer les données de Safari et ne doit pas les supprimer.
