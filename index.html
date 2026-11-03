@@ -80,28 +80,621 @@ function makeSteps(x){
  return ['Prépare les ingrédients : coupe '+pname.toLowerCase()+' en morceaux réguliers, détaille '+veg.toLowerCase()+' et hache l’oignon et l’ail.','Fais chauffer l’huile dans une grande poêle. Fais revenir l’oignon et l’ail, puis ajoute '+pname.toLowerCase()+'. Fais dorer et cuis à cœur.','Ajoute '+veg.toLowerCase()+' et '+spice+'. Fais cuire en remuant régulièrement jusqu’à ce que les légumes soient tendres.','Incorpore '+sauce.toLowerCase()+'. Ajoute un petit peu d’eau si besoin et laisse mijoter quelques minutes pour lier la sauce.','Prépare '+starch.toLowerCase()+' selon les indications du paquet, puis répartis la base et la garniture en 4 portions. Laisse refroidir rapidement avant de fermer les contenants.'];
 }
 const recipes=seed.map((s,i)=>{const [title,cat,emoji,kcal,p,c,f,time,pname,pqty,starch,sqty,veg,vqty,sauce,sauceqty,spice]=s;let ing=[{name:pname,qty:pqty,unit:'g',group:'Viandes & poissons'},{name:starch,qty:sqty,unit:'g',group:'Féculents'},{name:veg,qty:vqty,unit:'g',group:'Fruits & légumes'},{name:sauce,qty:sauceqty,unit:['Sauce soja','Moutarde','Pesto','Miel','Sauce teriyaki','Miso','Jus de citron','Beurre de cacahuète'].includes(sauce)?'g':'ml',group:'Épicerie & sauces'},{name:'Oignon',qty:1,unit:'pièce',group:'Fruits & légumes'},{name:'Ail',qty:2,unit:'gousse',group:'Fruits & légumes'},{name:'Huile d’olive',qty:15,unit:'ml',group:'Épicerie & sauces'},{name:spice,qty:2,unit:'c. à café',group:'Épices & condiments'}];if(/Lasagnes|Gratin|Hachis|Poulet cajun|Pain de viande/.test(title))ing.push({name:'Fromage râpé',qty:80,unit:'g',group:'Produits frais'});if(/crémeux|crème|Marry Me|Stroganoff|moutarde/.test(title)&&!ing.some(x=>x.name.includes('Crème')))ing.push({name:'Crème légère',qty:150,unit:'ml',group:'Produits frais'});return {id:'r'+(i+1),title,category:cat,emoji,kcal,protein:p,carbs:c,fat:f,time,ingredients:ing,steps:makeSteps({title,pname,starch,veg,sauce,spice}),storage:'3 jours au réfrigérateur. Jusqu’à 3 mois au congélateur dans un contenant adapté.',source:'Recette de départ — version adaptée'};});
+// Mon Batch — recipe cards. Quantities are for ONE eater's generous dinner
+// (equivalent to two standard portions). Batch scaling applies people × days.
+const DETAIL_RECIPES = {
+1:{time:35,kcal:1050,protein:82,carbs:142,fat:19,cost:5.40,storage:'3 jours au réfrigérateur à 4 °C maximum. Congélation possible 2 mois ; décongeler au réfrigérateur et réchauffer avec 1 à 2 c. à s. d’eau.',ingredients:[
+[240,'g','Blanc de poulet'],[150,'g','Nouilles chinoises sèches'],[300,'g','Mélange de légumes pour wok'],[40,'ml','Sauce soja'],[10,'ml','Huile de sésame'],[10,'ml','Vinaigre de riz'],[12,'g','Maïzena'],[5,'g','Ail en poudre'],[4,'g','Gingembre en poudre'],[30,'g','Miel'],[200,'ml','Eau'],[10,'g','Graines de sésame']
+],steps:[
+'5 min — Dans un bol, fouette l’eau, la sauce soja, le miel, le vinaigre de riz, la Maïzena, l’ail et le gingembre. Mélange jusqu’à disparition complète des grumeaux : cette sauce doit être prête avant la cuisson.',
+'5 min — Coupe le poulet en lanières régulières de 1,5 cm. Éponge-les avec du papier absorbant pour favoriser une belle coloration.',
+'5 min — Fais chauffer un grand wok à feu vif avec la moitié de l’huile de sésame. Fais saisir le poulet en une seule couche 2 min sans le remuer, puis retourne et cuis encore 2 à 3 min. Réserve-le sur une assiette : il terminera sa cuisson dans la sauce.',
+'6 min — Ajoute le reste d’huile et les légumes encore surgelés. Fais-les sauter 5 à 6 min à feu vif ; ils doivent être chauds, colorés et encore légèrement croquants. Si le wok rend de l’eau, laisse-la s’évaporer avant de poursuivre.',
+'4 min — Pendant ce temps, cuis les nouilles dans une grande casserole d’eau bouillante selon le paquet, en les gardant légèrement fermes. Égoutte-les soigneusement sans les rincer.',
+'3 min — Baisse le feu du wok à moyen. Remue la sauce préparée dans le bol, verse-la sur les légumes et laisse bouillonner 1 à 2 min jusqu’à ce qu’elle devienne brillante et nappe la spatule.',
+'3 min — Remets le poulet et son jus dans le wok. Fais cuire 2 à 3 min en remuant ; vérifie que le cœur du poulet atteint 74 °C ou n’est plus rosé.',
+'2 min — Ajoute les nouilles et mélange délicatement 1 à 2 min pour les enrober sans les casser. Termine avec les graines de sésame.'
+]},
+2:{time:65,kcal:1120,protein:72,carbs:104,fat:43,cost:7.20,storage:'3 jours au réfrigérateur. La texture reste meilleure sans congélation ; congélation possible 1 mois, mais la crème peut légèrement se séparer au réchauffage.',ingredients:[
+[150,'g','Saumon fumé'],[180,'g','Épinards frais'],[6,'pièce','Feuilles de lasagne sèches'],[250,'ml','Crème fraîche liquide'],[100,'g','Fromage frais ail et fines herbes'],[1,'pièce','Citron jaune'],[20,'g','Fromage râpé'],[1,'pièce','Oignon'],[10,'ml','Huile d’olive'],[1,'pincée','Noix de muscade'],[1,'pincée','Poivre noir'],[1,'pincée','Sel']
+],steps:[
+'10 min — Préchauffe le four à 190 °C chaleur tournante. Émince l’oignon, coupe le saumon fumé en lanières et lave puis essore les épinards. Râpe finement le zeste du citron et presse la moitié.',
+'5 min — Dans une petite casserole, chauffe doucement la crème avec le fromage frais, le zeste, 1 c. à s. de jus de citron, le poivre et une pincée de muscade. Fouette 3 à 4 min sans faire bouillir fort, jusqu’à obtenir une sauce homogène. Goûte avant de saler : le saumon fumé est déjà salé.',
+'5 min — Dans une poêle, fais revenir l’oignon dans l’huile 3 min à feu moyen. Ajoute les épinards en deux fois et laisse-les tomber 2 min. Égoutte l’excédent d’eau si nécessaire, puis coupe le feu.',
+'2 min — Incorpore le saumon fumé aux épinards hors du feu. Mélange brièvement ; il ne doit pas cuire longtemps à ce stade.',
+'5 min — Étale une fine couche de sauce au fond d’un plat à gratin. Dispose une couche de feuilles de lasagne, puis une partie du mélange saumon-épinards et de la sauce.',
+'5 min — Répète les couches en terminant par les feuilles recouvertes de sauce. Ajoute le fromage râpé sur le dessus. Les pâtes doivent être bien recouvertes de sauce pour cuire uniformément.',
+'30 min — Enfourne à 190 °C pendant 25 à 30 min. La pointe d’un couteau doit traverser les feuilles sans résistance et le dessus doit être doré. Couvre de papier aluminium si le dessus colore trop vite.',
+'10 min — Laisse reposer 10 min hors du four avant de découper : les couches se tiendront mieux. Répartis ensuite en parts généreuses.'
+]},
+3:{time:45,kcal:990,protein:72,carbs:118,fat:24,cost:4.80,storage:'3 jours au réfrigérateur. Congélation possible 3 mois ; congèle le chili et le riz séparément pour préserver la texture.',ingredients:[
+[240,'g','Bœuf haché 5 %'],[100,'g','Haricots rouges égouttés'],[80,'g','Maïs égoutté'],[260,'g','Tomates concassées'],[40,'g','Concentré de tomate'],[100,'g','Riz cru'],[1,'pièce','Oignon'],[2,'gousse','Ail'],[1,'pièce','Poivron rouge'],[20,'ml','Huile d’olive'],[4,'g','Cumin moulu'],[4,'g','Paprika fumé'],[1,'g','Piment doux'],[100,'ml','Eau ou bouillon'],[20,'g','Fromage râpé'],[10,'g','Coriandre fraîche'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'8 min — Rince le riz jusqu’à ce que l’eau soit presque claire. Émince l’oignon, hache l’ail et coupe le poivron en petits dés. Égoutte et rince les haricots et le maïs.',
+'15 min — Mets le riz dans une casserole avec 200 ml d’eau et une pincée de sel. Porte à ébullition, couvre, baisse au minimum et cuis 10 à 12 min selon le riz. Coupe le feu et laisse reposer 5 min à couvert.',
+'6 min — Dans une cocotte chaude, fais revenir l’oignon et le poivron dans l’huile 4 min à feu moyen. Ajoute l’ail pendant les 30 dernières secondes sans le laisser brunir.',
+'6 min — Ajoute le bœuf haché. Émiette-le à la spatule et fais-le dorer 5 à 6 min à feu moyen-vif jusqu’à ce qu’il ne reste plus de zones rouges.',
+'2 min — Ajoute le concentré de tomate, le cumin, le paprika fumé et le piment. Fais torréfier 1 min en mélangeant pour développer les arômes.',
+'12 min — Verse les tomates concassées et l’eau ou le bouillon. Mélange, couvre partiellement et laisse mijoter 10 min à feu doux ; la sauce doit réduire sans accrocher.',
+'5 min — Ajoute les haricots et le maïs. Laisse chauffer 4 à 5 min. Goûte et ajuste sel, poivre et piment.',
+'2 min — Répartis le riz et le chili dans les contenants. Ajoute le fromage râpé et la coriandre au moment de servir.'
+]},
+4:{time:45,kcal:1020,protein:76,carbs:112,fat:27,cost:6.70,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; conserve la semoule à part et ajoute une cuillère d’eau avant de la réchauffer.',ingredients:[
+[250,'g','Rumsteck'],[100,'g','Semoule de couscous sèche'],[300,'g','Carottes'],[1,'pièce','Oignon'],[10,'g','Miel'],[4,'g','Cumin moulu'],[4,'g','Paprika doux'],[15,'ml','Huile d’olive'],[120,'ml','Bouillon de bœuf'],[10,'g','Beurre'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'8 min — Préchauffe le four à 200 °C. Épluche les carottes et coupe-les en bâtonnets de taille proche. Émince l’oignon et coupe le rumsteck en fines lanières perpendiculairement aux fibres.',
+'3 min — Mélange les carottes avec 10 ml d’huile, le miel, la moitié du cumin, le paprika, du sel et du poivre. Étale-les en une seule couche sur une plaque.',
+'25 min — Rôtis les carottes 22 à 25 min à 200 °C en les retournant à mi-cuisson. Elles doivent être tendres avec des bords caramélisés.',
+'5 min — Porte le bouillon à ébullition. Verse-le sur la semoule dans un saladier, couvre 5 min puis égrène à la fourchette avec le beurre. Si elle paraît sèche, ajoute 1 à 2 c. à s. d’eau chaude.',
+'4 min — Fais chauffer le reste d’huile dans une poêle très chaude. Saisis le bœuf en deux fois si nécessaire, 1 à 2 min par face ; ne surcharge pas la poêle pour éviter qu’il ne bouille.',
+'4 min — Réserve le bœuf. Dans la même poêle, fais revenir l’oignon 3 min, ajoute le reste de cumin et déglace avec 60 ml de bouillon. Laisse réduire 1 min pour obtenir un jus parfumé.',
+'2 min — Remets le bœuf dans la poêle hors du feu et mélange au jus. Répartis semoule, carottes rôties et bœuf dans les contenants.'
+]},
+5:{time:35,kcal:980,protein:84,carbs:108,fat:20,cost:4.90,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; garde la sauce à part si tu veux conserver le poivron plus ferme.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Riz cru'],[200,'g','Poivron rouge et jaune'],[30,'ml','Sauce soja'],[10,'g','Miel'],[10,'ml','Huile d’olive'],[1,'gousse','Ail'],[5,'g','Gingembre frais'],[10,'ml','Jus de citron vert'],[10,'g','Graines de sésame'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz, mets-le dans une casserole avec 200 ml d’eau et une pincée de sel. Porte à ébullition, couvre et cuis à feu très doux 10 à 12 min. Laisse reposer 5 min hors du feu.',
+'5 min — Coupe le poulet en cubes de 2 à 3 cm. Émince les poivrons en lanières. Hache l’ail et râpe le gingembre.',
+'2 min — Dans un bol, mélange la sauce soja, le miel, le jus de citron vert, l’ail et le gingembre. Prépare cette sauce avant la cuisson pour ne pas brûler le miel dans la poêle.',
+'7 min — Fais chauffer l’huile dans une grande poêle à feu moyen-vif. Saisis le poulet 5 à 6 min en le retournant, jusqu’à ce qu’il soit doré et cuit à cœur (74 °C). Réserve-le.',
+'6 min — Dans la même poêle, fais sauter les poivrons 5 à 6 min ; ils doivent rester légèrement croquants. Ajoute une cuillère à soupe d’eau si le fond colore trop.',
+'3 min — Verse la sauce dans la poêle et laisse bouillonner 1 min. Remets le poulet et mélange 2 min, jusqu’à ce que les morceaux soient brillants et bien enrobés.',
+'2 min — Répartis le riz dans les contenants, ajoute le poulet et les poivrons, puis parsème de graines de sésame.'
+]},
+6:{time:40,kcal:1010,protein:82,carbs:99,fat:30,cost:5.40,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; la sauce coco peut épaissir, ajoute un peu d’eau au réchauffage.',ingredients:[
+[250,'g','Blanc de poulet'],[100,'g','Riz cru'],[250,'g','Haricots verts'],[150,'ml','Lait de coco'],[10,'g','Citronnelle finement hachée ou pâte de citronnelle'],[2,'gousse','Ail'],[10,'ml','Huile neutre'],[10,'ml','Sauce soja'],[80,'ml','Eau'],[10,'ml','Jus de citron vert'],[5,'g','Gingembre frais'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, à feu doux 10 à 12 min. Laisse reposer 5 min à couvert.',
+'5 min — Coupe le poulet en morceaux réguliers. Émince l’ail, râpe le gingembre et coupe les haricots verts en deux si nécessaire.',
+'2 min — Dans un bol, mélange le lait de coco, l’eau, la sauce soja, le jus de citron vert et la citronnelle. Cette base de sauce sera versée après la coloration du poulet.',
+'7 min — Chauffe l’huile dans une sauteuse. Fais dorer le poulet 5 à 6 min à feu moyen-vif en le retournant. Réserve-le sur une assiette.',
+'2 min — Dans la même sauteuse, fais revenir l’ail et le gingembre 30 secondes. Ajoute les haricots et fais-les sauter 1 min.',
+'8 min — Verse la sauce coco, couvre et laisse cuire 6 à 8 min à feu moyen-doux. Les haricots doivent être tendres tout en gardant leur tenue.',
+'4 min — Remets le poulet et son jus dans la sauteuse. Laisse mijoter 3 à 4 min, jusqu’à ce que le poulet soit cuit à cœur et que la sauce nappe légèrement la cuillère.',
+'2 min — Répartis le riz, le poulet et les haricots avec la sauce coco. Termine avec un peu de zeste de citron vert si tu en as.'
+]},
+7:{time:45,kcal:1100,protein:82,carbs:105,fat:39,cost:6.30,storage:'3 jours au réfrigérateur. Congélation possible 1 mois, mais la crème peut se séparer légèrement ; réchauffe doucement en ajoutant un trait d’eau.',ingredients:[
+[250,'g','Hauts de cuisse de poulet désossés'],[100,'g','Riz cru'],[200,'g','Haricots verts'],[100,'ml','Crème fraîche liquide'],[150,'ml','Bouillon de volaille'],[20,'g','Farine'],[20,'g','Tomates séchées égouttées'],[30,'g','Parmesan râpé'],[2,'gousse','Ail'],[10,'g','Beurre'],[10,'ml','Huile d’olive'],[2,'g','Paprika doux'],[2,'g','Thym séché'],[1,'pincée','Flocons de piment'],[1,'pincée','Poivre noir'],[1,'pincée','Sel']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, à couvert et à feu doux. Laisse reposer 5 min hors du feu.',
+'5 min — Coupe le poulet en gros morceaux. Sale, poivre et saupoudre de farine en tapotant pour retirer l’excédent. Hache l’ail et coupe les tomates séchées en lanières.',
+'2 min — Dans un bol, mélange le bouillon, la crème, le paprika, le thym et les flocons de piment. Râpe le parmesan et garde-le de côté.',
+'8 min — Fais chauffer le beurre et l’huile dans une grande poêle. Fais dorer le poulet 3 à 4 min par face sans le déplacer trop souvent. Réserve-le ; il finira de cuire dans la sauce.',
+'2 min — Fais revenir l’ail et les tomates séchées 1 min dans la même poêle en grattant les sucs.',
+'8 min — Verse le mélange bouillon-crème en fouettant. Laisse frémir 3 min puis ajoute le parmesan. Remue jusqu’à obtenir une sauce lisse et nappante.',
+'12 min — Remets le poulet et son jus dans la poêle. Couvre partiellement et laisse mijoter 8 à 10 min à feu doux ; le cœur doit atteindre 74 °C. En parallèle, cuis les haricots à la vapeur ou dans l’eau bouillante 6 à 8 min.',
+'2 min — Goûte la sauce et ajuste le poivre. Répartis le riz, les haricots et le poulet nappé de sauce.'
+]},
+8:{time:35,kcal:1000,protein:85,carbs:105,fat:25,cost:4.90,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; réchauffe la sauce à feu doux avec 1 c. à s. d’eau ou de bouillon.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Riz cru'],[20,'g','Moutarde à l’ancienne'],[100,'ml','Bouillon de volaille'],[80,'ml','Crème fraîche épaisse'],[1,'pièce','Oignon'],[2,'gousse','Ail'],[10,'ml','Huile d’olive'],[10,'g','Persil frais'],[1,'pincée','Poivre noir'],[1,'pincée','Sel']
+],steps:[
+'12 min — Rince le riz et fais-le cuire dans 200 ml d’eau salée, couvert, à feu doux. Laisse reposer 5 min à couvert.',
+'5 min — Coupe le poulet en cubes de 3 cm. Émince finement l’oignon et hache l’ail. Prépare le bouillon dans un bol.',
+'2 min — Mélange la moutarde à l’ancienne et la crème dans un petit bol. Détends avec 2 c. à s. de bouillon pour obtenir une préparation facile à incorporer.',
+'6 min — Chauffe l’huile dans une poêle. Fais revenir l’oignon 3 min à feu moyen, puis ajoute l’ail 30 secondes.',
+'7 min — Ajoute le poulet et fais-le dorer 6 à 7 min en remuant. Il doit être doré à l’extérieur ; il finira sa cuisson dans la sauce.',
+'5 min — Verse le reste de bouillon, gratte les sucs et laisse réduire 2 min. Baisse le feu, ajoute le mélange crème-moutarde et remue sans faire bouillir fort.',
+'4 min — Laisse mijoter 3 à 4 min jusqu’à cuisson complète du poulet et sauce nappante. Ajoute le persil haché, goûte et ajuste le poivre et le sel.',
+'2 min — Répartis le riz et le poulet à la moutarde avec toute la sauce.'
+]},
+9:{time:45,kcal:1030,protein:76,carbs:110,fat:29,cost:5.60,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; congèle la garniture séparément du riz.',ingredients:[
+[240,'g','Bœuf haché 5 %'],[100,'g','Riz cru'],[300,'g','Aubergine'],[300,'g','Tomates concassées'],[1,'pièce','Oignon'],[2,'gousse','Ail'],[4,'g','Cumin moulu'],[10,'ml','Huile d’olive'],[100,'ml','Eau ou bouillon'],[10,'g','Concentré de tomate'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, à feu doux. Laisse reposer 5 min.',
+'6 min — Coupe l’aubergine en cubes de 2 cm. Sale-les légèrement et laisse-les dégorger 5 min pendant que tu éminces l’oignon et haches l’ail.',
+'8 min — Chauffe la moitié de l’huile dans une grande poêle. Fais dorer l’aubergine 7 à 8 min en remuant, jusqu’à coloration et début de tendreté. Réserve.',
+'5 min — Ajoute le reste d’huile. Fais revenir l’oignon 3 min, ajoute l’ail et le cumin 30 secondes, puis émiette le bœuf et fais-le saisir 4 à 5 min.',
+'2 min — Ajoute le concentré de tomate et mélange 1 min pour le faire légèrement caraméliser. Verse les tomates concassées et l’eau.',
+'12 min — Remets l’aubergine dans la poêle. Couvre partiellement et laisse mijoter 10 à 12 min à feu doux jusqu’à ce qu’elle soit fondante et que la sauce ait épaissi.',
+'2 min — Rectifie le sel et le poivre. Répartis le riz et la préparation bœuf-aubergine dans les contenants.'
+]},
+10:{time:35,kcal:920,protein:67,carbs:100,fat:29,cost:4.80,storage:'3 jours au réfrigérateur. La purée se congèle 2 mois ; décongèle lentement et détends-la avec un peu de lait au réchauffage.',ingredients:[
+[300,'g','Patate douce'],[250,'g','Steak haché 5 %'],[1,'pièce','Oignon'],[100,'ml','Lait'],[10,'ml','Huile d’olive'],[10,'g','Beurre'],[1,'pincée','Muscade'],[1,'pincée','Sel'],[1,'pincée','Poivre noir'],[5,'g','Moutarde douce']
+],steps:[
+'5 min — Épluche la patate douce et coupe-la en cubes de 2 cm pour une cuisson régulière. Émince l’oignon.',
+'18 min — Plonge les cubes dans une casserole d’eau froide salée. Porte à ébullition et cuis 15 à 18 min ; la lame d’un couteau doit entrer sans résistance.',
+'7 min — Pendant ce temps, chauffe l’huile dans une poêle. Fais revenir l’oignon 3 min, ajoute le steak haché émietté et cuis 4 à 5 min à feu moyen-vif jusqu’à belle coloration. Sale et poivre.',
+'3 min — Chauffe le lait avec le beurre, la muscade et la moutarde sans le faire bouillir.',
+'3 min — Égoutte soigneusement la patate douce puis écrase-la au presse-purée. Incorpore progressivement le lait chaud jusqu’à obtenir une purée lisse mais épaisse. Goûte et rectifie l’assaisonnement.',
+'2 min — Répartis la purée dans les contenants et dépose le bœuf à côté ou dessus. Garde le jus de cuisson pour arroser la viande.'
+]},
+11:{time:35,kcal:950,protein:78,carbs:110,fat:20,cost:4.90,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; garde la semoule séparée de la poêlée.',ingredients:[
+[220,'g','Émincé de dinde'],[100,'g','Semoule sèche'],[160,'g','Poivrons'],[30,'g','Tomates séchées'],[1,'pièce','Oignon'],[2,'gousse','Ail'],[15,'ml','Huile d’olive'],[1,'pièce','Citron jaune'],[100,'ml','Bouillon de volaille'],[3,'g','Paprika fumé'],[1,'pincée','Poivre noir'],[1,'pincée','Sel']
+],steps:[
+'5 min — Coupe la dinde en lanières, les poivrons en lamelles et les tomates séchées en petits morceaux. Émince l’oignon et hache l’ail.',
+'5 min — Dans un saladier, verse la semoule. Ajoute le zeste d’un demi-citron et une pincée de sel. Porte 100 ml d’eau ou de bouillon à ébullition.',
+'5 min — Verse le liquide bouillant sur la semoule, couvre 5 min puis égrène à la fourchette avec 1 c. à c. d’huile.',
+'7 min — Fais chauffer le reste d’huile dans une grande poêle. Saisis la dinde 5 à 6 min à feu vif pour la colorer. Réserve-la.',
+'6 min — Fais revenir l’oignon et les poivrons 5 min dans la même poêle. Ajoute l’ail et le paprika pendant les 30 dernières secondes.',
+'4 min — Ajoute les tomates séchées, le bouillon et le jus d’un demi-citron. Laisse réduire 2 min puis remets la dinde et cuis encore 2 min, jusqu’à 74 °C à cœur.',
+'2 min — Goûte, ajuste sel et poivre, puis répartis la semoule citronnée et la poêlée de dinde.'
+]},
+12:{time:35,kcal:1000,protein:77,carbs:108,fat:25,cost:5.20,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; la sauce teriyaki épaissit au froid, ajoute un trait d’eau au réchauffage.',ingredients:[
+[240,'g','Filet de porc'],[100,'g','Riz cru'],[200,'g','Aubergine'],[30,'ml','Sauce soja'],[15,'g','Miel'],[10,'ml','Vinaigre de riz'],[10,'ml','Huile neutre'],[1,'gousse','Ail'],[5,'g','Gingembre frais'],[5,'g','Maïzena'],[50,'ml','Eau'],[1,'pincée','Poivre noir']
+],steps:[
+'10 min — Coupe le porc en cubes de 2,5 cm. Mélange-le avec la moitié de la sauce soja, le miel, l’ail haché et le gingembre râpé. Laisse mariner 10 min au frais.',
+'12 min — Rince le riz et fais-le cuire dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Coupe l’aubergine en rondelles épaisses ou en demi-lunes. Badigeonne-les légèrement d’huile et fais-les griller dans une poêle striée ou une grande poêle 3 à 4 min par face. Réserve.',
+'6 min — Dans un bol, mélange le reste de sauce soja, le vinaigre de riz, la Maïzena et l’eau. Remue jusqu’à ce qu’il n’y ait plus de grumeaux.',
+'7 min — Fais chauffer le reste d’huile dans une poêle très chaude. Égoutte légèrement le porc et fais-le dorer 6 à 7 min en le retournant souvent ; cuis-le à cœur sans le dessécher.',
+'3 min — Baisse le feu, verse la sauce préparée et laisse épaissir 2 à 3 min en remuant jusqu’à obtenir un glaçage brillant. Ajoute une cuillère d’eau si la sauce devient trop épaisse.',
+'2 min — Répartis le riz, l’aubergine grillée et le porc laqué. Nappe avec le reste de sauce.'
+]},
+13:{time:70,kcal:1150,protein:74,carbs:115,fat:39,cost:5.60,storage:'3 jours au réfrigérateur. Se congèle 2 à 3 mois en parts individuelles. Réchauffe couvert au four à 160 °C ou au micro-ondes.',ingredients:[
+[200,'g','Bœuf haché 5 %'],[6,'pièce','Feuilles de lasagne sèches'],[300,'g','Tomates concassées'],[40,'g','Concentré de tomate'],[1,'pièce','Carotte'],[50,'g','Céleri branche'],[0.5,'pièce','Oignon'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[200,'ml','Lait'],[16,'g','Farine'],[16,'g','Beurre'],[40,'g','Fromage râpé'],[1,'pincée','Muscade'],[1,'pincée','Sel'],[1,'pincée','Poivre noir'],[1,'g','Origan séché']
+],steps:[
+'10 min — Préchauffe le four à 190 °C. Coupe très finement la carotte, le céleri et l’oignon, puis hache l’ail. Cette base de légumes doit être en petits dés pour fondre dans la sauce.',
+'7 min — Fais revenir carotte, céleri et oignon dans l’huile 5 à 6 min à feu moyen. Ajoute l’ail 30 secondes.',
+'7 min — Ajoute le bœuf haché, sale et poivre. Fais-le dorer 5 à 6 min en l’émiettant. Il doit perdre sa couleur rouge avant d’ajouter la tomate.',
+'20 min — Incorpore le concentré de tomate, les tomates concassées et l’origan. Ajoute 100 ml d’eau, puis laisse mijoter 15 à 20 min à feu doux jusqu’à une sauce épaisse.',
+'5 min — Pour la béchamel, chauffe le lait dans une petite casserole. Dans une autre, fais fondre le beurre, ajoute la farine et fouette 1 min à feu doux sans laisser brunir.',
+'5 min — Verse le lait chaud progressivement en fouettant. Laisse épaissir 3 à 4 min ; assaisonne avec sel, poivre et muscade. La béchamel doit napper une cuillère.',
+'5 min — Dans un plat, étale une fine couche de béchamel, puis alterne feuilles de lasagne, bolognaise et béchamel. Termine par la béchamel et le fromage râpé ; les feuilles doivent être bien couvertes.',
+'30 min — Enfourne 30 à 35 min à 190 °C jusqu’à ce que le dessus soit doré et que les pâtes soient tendres. Laisse reposer 10 min avant de découper.'
+]},
+14:{time:45,kcal:980,protein:73,carbs:90,fat:37,cost:4.70,storage:'3 jours au réfrigérateur. Purée et haricots se congèlent 2 mois ; la sauce peut être congelée mais se remue doucement au réchauffage.',ingredients:[
+[240,'g','Steak haché 5 %'],[300,'g','Pommes de terre'],[220,'g','Haricots verts'],[100,'ml','Lait'],[100,'ml','Crème fraîche liquide'],[15,'g','Moutarde à l’ancienne'],[10,'ml','Huile d’olive'],[15,'g','Beurre'],[1,'pincée','Sel'],[1,'pincée','Poivre noir'],[1,'pincée','Noix de muscade']
+],steps:[
+'5 min — Épluche les pommes de terre et coupe-les en cubes de 2 cm. Rince les haricots verts s’ils sont frais et coupe les extrémités.',
+'18 min — Mets les pommes de terre dans une casserole d’eau froide salée. Porte à ébullition et cuis 15 à 18 min, jusqu’à ce qu’elles soient très tendres.',
+'8 min — Fais cuire les haricots 7 à 8 min dans l’eau bouillante salée ou à la vapeur. Égoutte et réserve ; ils doivent rester verts et légèrement fermes.',
+'5 min — Chauffe une poêle avec l’huile. Fais cuire les steaks hachés 2 à 3 min par face selon l’épaisseur et la cuisson souhaitée. Réserve-les au chaud.',
+'3 min — Dans la même poêle, verse la crème et gratte les sucs. Ajoute la moutarde et le poivre, puis laisse réduire 2 à 3 min à feu doux. Ne fais pas bouillir fortement.',
+'4 min — Chauffe le lait et le beurre. Égoutte les pommes de terre, écrase-les et incorpore progressivement le lait chaud. Assaisonne avec sel, poivre et muscade.',
+'2 min — Répartis la purée, les haricots et le steak. Nappe la viande de sauce moutarde juste avant de fermer les contenants.'
+]},
+15:{time:40,kcal:1080,protein:82,carbs:105,fat:35,cost:5.40,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; ajoute un trait d’eau ou de lait de coco en réchauffant.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Riz cru'],[120,'g','Carotte'],[150,'g','Courgette'],[150,'ml','Lait de coco'],[20,'g','Pâte de curry douce'],[100,'ml','Bouillon de volaille'],[1,'pièce','Oignon'],[2,'gousse','Ail'],[10,'g','Gingembre frais'],[10,'ml','Huile de coco'],[10,'g','Coriandre fraîche'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min hors du feu.',
+'6 min — Coupe le poulet en cubes, la carotte en fines demi-rondelles et la courgette en demi-lunes. Émince l’oignon, hache l’ail et râpe le gingembre.',
+'3 min — Dans un bol, mélange le lait de coco et le bouillon. Garde la pâte de curry à part pour la faire revenir dans la poêle et libérer ses arômes.',
+'6 min — Fais chauffer l’huile de coco dans une sauteuse. Fais revenir l’oignon 2 min, puis ajoute l’ail et le gingembre 30 secondes. Incorpore la pâte de curry et remue 1 min.',
+'6 min — Ajoute le poulet et fais-le dorer 5 à 6 min à feu moyen-vif. Remue pour enrober chaque morceau de curry.',
+'5 min — Ajoute la carotte et la courgette. Fais revenir 4 à 5 min ; la carotte doit commencer à s’attendrir sans devenir molle.',
+'12 min — Verse le mélange coco-bouillon, couvre partiellement et laisse mijoter 10 à 12 min à feu doux. Le poulet doit atteindre 74 °C à cœur et la sauce devenir crémeuse.',
+'2 min — Goûte, ajuste le sel et le poivre, ajoute la coriandre ciselée et sers avec le riz.'
+]},
+16:{time:35,kcal:1050,protein:83,carbs:130,fat:26,cost:5.30,storage:'3 jours au réfrigérateur. Congélation possible 1 mois ; les pâtes absorbent la sauce, ajoute 1 à 2 c. à s. d’eau ou de lait au réchauffage.',ingredients:[
+[175,'g','Tagliatelles sèches'],[240,'g','Émincé de dinde'],[150,'g','Tomates cerises'],[0.5,'pièce','Oignon'],[2,'gousse','Ail'],[70,'ml','Crème fraîche épaisse'],[10,'ml','Huile d’olive'],[20,'g','Parmesan râpé'],[10,'g','Persil ou basilic frais'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Émince l’oignon, hache l’ail et coupe les tomates cerises en deux. Coupe la dinde en lamelles de taille régulière.',
+'10 min — Porte une grande casserole d’eau salée à ébullition. Fais cuire les tagliatelles selon le paquet en les gardant al dente. Réserve une tasse d’eau de cuisson avant d’égoutter.',
+'7 min — Chauffe l’huile dans une grande poêle. Fais dorer la dinde 5 à 6 min à feu moyen-vif en la retournant. Sale et poivre puis réserve-la.',
+'4 min — Dans la même poêle, fais revenir l’oignon 2 à 3 min. Ajoute l’ail 30 secondes, puis les tomates cerises côté coupé vers le bas.',
+'5 min — Fais cuire les tomates 4 à 5 min jusqu’à ce qu’elles commencent à éclater et libèrent leur jus. Écrase-en quelques-unes à la spatule.',
+'4 min — Baisse le feu. Ajoute la crème et le parmesan, puis 2 à 3 c. à s. d’eau de cuisson. Mélange jusqu’à obtenir une sauce soyeuse ; ne la fais pas bouillir.',
+'3 min — Remets la dinde et les tagliatelles dans la poêle. Mélange 1 à 2 min pour enrober les pâtes, ajoute un peu d’eau de cuisson si nécessaire et termine avec les herbes.'
+]},
+17:{time:35,kcal:950,protein:88,carbs:105,fat:19,cost:5.10,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; garde la sauce avec le poulet et ajoute un peu d’eau au réchauffage.',ingredients:[
+[250,'g','Blanc de poulet'],[100,'g','Riz cru'],[250,'g','Brocoli'],[10,'g','Miso blanc'],[10,'ml','Sauce soja'],[15,'g','Miel'],[10,'ml','Huile de sésame'],[2,'gousse','Ail'],[5,'g','Maïzena'],[100,'ml','Eau'],[5,'g','Gingembre frais'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Coupe le poulet en morceaux de 3 cm. Détaille le brocoli en petits bouquets de taille égale. Hache l’ail et râpe le gingembre.',
+'2 min — Dans un bol, fouette le miso, la sauce soja, le miel, la Maïzena, l’eau, l’ail et le gingembre. Il ne doit rester aucun grumeau ; cette sauce épaissira en fin de cuisson.',
+'6 min — Chauffe l’huile de sésame dans une grande poêle. Fais dorer le poulet 4 à 5 min en le remuant pour colorer les faces. Ne verse pas encore la sauce.',
+'6 min — Ajoute le brocoli et 2 c. à s. d’eau. Couvre 4 à 5 min pour le cuire à la vapeur dans la poêle ; il doit être tendre mais encore vert.',
+'3 min — Remue la sauce dans le bol puis verse-la dans la poêle. Mélange à feu doux 2 à 3 min, jusqu’à ce qu’elle devienne brillante et épaisse. Ajoute une cuillère d’eau si elle devient trop collante.',
+'2 min — Vérifie que le poulet est cuit à cœur (74 °C). Répartis le riz puis le poulet et le brocoli nappés de sauce miso.'
+]},
+18:{time:50,kcal:1050,protein:88,carbs:91,fat:35,cost:5.70,storage:'3 jours au réfrigérateur. Congélation possible 1 mois ; la sauce crémeuse peut épaissir, détends-la avec un peu de bouillon au réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[300,'g','Pommes de terre'],[180,'g','Brocoli'],[60,'ml','Crème fraîche épaisse'],[150,'ml','Bouillon de volaille'],[30,'g','Parmesan râpé'],[0.5,'pièce','Oignon'],[2,'gousse','Ail'],[10,'ml','Huile d’olive'],[10,'g','Beurre'],[10,'g','Moutarde'],[1,'c. à café','Paprika doux'],[1,'c. à café','Ail en poudre'],[5,'g','Persil frais'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'10 min — Préchauffe le four à 200 °C. Coupe les pommes de terre en quartiers de 2 cm. Mélange-les avec la moitié de l’huile, le paprika, l’ail en poudre, sel et poivre.',
+'30 min — Étale les pommes de terre sur une plaque sans les superposer. Rôtis 25 à 30 min à 200 °C en les retournant à mi-cuisson jusqu’à ce qu’elles soient dorées et fondantes.',
+'6 min — Détaille le brocoli en petits bouquets et cuis-le 5 à 6 min dans l’eau bouillante salée. Égoutte-le bien pour ne pas diluer la sauce.',
+'5 min — Coupe le poulet en gros morceaux, émince l’oignon et hache l’ail. Fais chauffer le reste d’huile et le beurre dans une grande poêle.',
+'8 min — Fais dorer le poulet 3 à 4 min par face à feu moyen-vif. Réserve-le sur une assiette ; il finira de cuire dans la sauce.',
+'4 min — Fais revenir l’oignon 3 min dans la poêle, ajoute l’ail 30 secondes. Verse le bouillon et gratte les sucs avec une spatule.',
+'5 min — Ajoute la crème, la moutarde et le parmesan. Fais frémir doucement 3 à 4 min en remuant jusqu’à ce que la sauce soit lisse et nappante.',
+'5 min — Remets le poulet et son jus dans la sauce et cuis 4 à 5 min jusqu’à 74 °C à cœur. Ajoute le persil et rectifie l’assaisonnement.',
+'2 min — Répartis les pommes de terre rôties, le brocoli et le poulet crémeux à l’ail-parmesan.'
+]},
+19:{time:50,kcal:940,protein:82,carbs:105,fat:22,cost:5.40,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; la ratatouille supporte très bien la congélation. Réchauffe le riz avec une cuillère d’eau.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Riz cru'],[150,'g','Courgette'],[150,'g','Aubergine'],[120,'g','Poivron'],[250,'g','Tomates'],[0.5,'pièce','Oignon'],[1,'gousse','Ail'],[15,'ml','Huile d’olive'],[1,'pièce','Citron jaune'],[2,'g','Herbes de Provence'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'8 min — Coupe la courgette, l’aubergine et le poivron en dés de 1,5 cm. Coupe les tomates en dés, émince l’oignon et hache l’ail.',
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min hors du feu.',
+'5 min — Chauffe la moitié de l’huile dans une sauteuse. Fais revenir l’oignon 3 min, ajoute l’ail 30 secondes puis le poivron et l’aubergine.',
+'8 min — Fais sauter les légumes 7 à 8 min à feu moyen-vif pour les colorer. Ajoute la courgette et poursuis 3 min.',
+'12 min — Ajoute les tomates, la moitié des herbes de Provence et 60 ml d’eau. Couvre partiellement et laisse mijoter 10 à 12 min à feu doux jusqu’à obtenir des légumes fondants mais encore distincts.',
+'7 min — Pendant ce temps, coupe le poulet en filets épais. Chauffe le reste d’huile dans une autre poêle, assaisonne le poulet avec le jus d’un demi-citron, les herbes restantes, sel et poivre.',
+'8 min — Fais dorer le poulet 4 min de chaque côté selon l’épaisseur, jusqu’à 74 °C à cœur. Laisse reposer 2 min puis tranche.',
+'2 min — Goûte la ratatouille et ajoute un peu de jus de citron. Répartis le riz, la ratatouille et les tranches de poulet.'
+]},
+20:{time:65,kcal:1080,protein:75,carbs:100,fat:36,cost:5.10,storage:'3 jours au réfrigérateur. Se congèle 2 à 3 mois en parts individuelles ; réchauffe couvert au four à 160 °C.',ingredients:[
+[250,'g','Bœuf haché 5 %'],[350,'g','Pommes de terre'],[80,'g','Carotte'],[40,'g','Céleri branche'],[0.5,'pièce','Oignon'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[100,'ml','Lait'],[15,'g','Beurre'],[20,'g','Concentré de tomate'],[100,'ml','Bouillon de bœuf'],[25,'g','Fromage râpé'],[1,'pincée','Muscade'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'8 min — Épluche les pommes de terre et coupe-les en cubes. Coupe carotte et céleri en très petits dés, émince l’oignon et hache l’ail.',
+'18 min — Fais cuire les pommes de terre dans l’eau salée 15 à 18 min jusqu’à tendreté. Égoutte-les soigneusement.',
+'7 min — Dans une poêle, chauffe l’huile et fais revenir carotte, céleri et oignon 5 min à feu moyen. Ajoute l’ail 30 secondes.',
+'7 min — Ajoute le bœuf, émiette-le et fais-le dorer 5 à 6 min. Incorpore le concentré de tomate, mélange 1 min puis verse le bouillon.',
+'10 min — Laisse mijoter la viande 8 à 10 min à feu doux jusqu’à ce que le liquide soit presque absorbé. Goûte et assaisonne.',
+'5 min — Chauffe le lait avec le beurre et la muscade. Écrase les pommes de terre et ajoute le lait progressivement jusqu’à obtenir une purée ferme et lisse.',
+'5 min — Dans un plat, étale la viande puis recouvre de purée. Lisse à la fourchette, parsème de fromage et crée quelques stries pour gratiner.',
+'18 min — Enfourne 15 à 18 min à 200 °C, puis 2 min sous le gril si nécessaire. Laisse reposer 5 min avant de répartir.'
+]},
+21:{time:35,kcal:1080,protein:91,carbs:130,fat:28,cost:5.90,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; mélange les pâtes avec un filet d’eau au réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[175,'g','Penne sèches'],[30,'g','Pesto vert'],[30,'g','Tomates séchées'],[80,'g','Tomates cerises'],[20,'g','Parmesan râpé'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[30,'ml','Eau de cuisson des pâtes'],[1,'pincée','Poivre noir'],[1,'pincée','Sel']
+],steps:[
+'5 min — Coupe le poulet en cubes et les tomates séchées en fines lanières. Coupe les tomates cerises en deux et hache l’ail.',
+'10 min — Fais cuire les penne dans une grande quantité d’eau salée en suivant le paquet, en les gardant al dente. Réserve 100 ml d’eau de cuisson puis égoutte.',
+'7 min — Chauffe l’huile dans une poêle. Fais dorer le poulet 6 à 7 min à feu moyen-vif jusqu’à 74 °C à cœur. Réserve.',
+'4 min — Fais revenir l’ail 30 secondes dans la poêle, puis ajoute les tomates cerises et les tomates séchées. Fais cuire 3 min pour concentrer les saveurs.',
+'3 min — Dans un bol, détends le pesto avec 30 à 50 ml d’eau de cuisson et le parmesan. Mélange pour obtenir une sauce crémeuse plutôt qu’une pâte épaisse.',
+'3 min — Remets le poulet et les pâtes dans la poêle hors du feu. Ajoute la sauce pesto et mélange ; ajuste avec un peu d’eau de cuisson si nécessaire.',
+'2 min — Poivre, goûte et répartis sans laisser les pâtes sécher dans la poêle.'
+]},
+22:{time:35,kcal:1030,protein:90,carbs:130,fat:24,cost:5.50,storage:'3 jours au réfrigérateur. Congélation possible 1 mois ; ajoute un peu de lait ou d’eau au réchauffage pour détendre la sauce.',ingredients:[
+[240,'g','Blanc de poulet'],[175,'g','Fusilli secs'],[250,'g','Champignons de Paris'],[100,'ml','Crème légère'],[1,'pièce','Échalote'],[2,'gousse','Ail'],[15,'g','Parmesan râpé'],[10,'ml','Huile d’olive'],[10,'g','Persil frais'],[50,'ml','Eau de cuisson des pâtes'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Émince les champignons et l’échalote. Hache l’ail. Coupe le poulet en morceaux de 2 à 3 cm.',
+'10 min — Fais cuire les fusilli dans de l’eau bouillante salée selon le paquet. Réserve une petite tasse d’eau de cuisson puis égoutte.',
+'7 min — Fais chauffer l’huile dans une grande poêle. Fais dorer le poulet 6 à 7 min, puis réserve-le.',
+'7 min — Fais revenir les champignons à feu vif dans la même poêle sans les saler au départ. Laisse leur eau s’évaporer 4 min, ajoute l’échalote 2 min puis l’ail 30 secondes.',
+'4 min — Verse la crème et l’eau de cuisson. Laisse frémir 2 à 3 min, puis ajoute le parmesan et le poivre.',
+'3 min — Remets le poulet et les pâtes dans la sauce. Mélange 2 min ; la sauce doit napper les fusilli sans être compacte.',
+'2 min — Ajoute le persil haché, goûte et rectifie le sel avant de répartir.'
+]},
+23:{time:50,kcal:1100,protein:76,carbs:142,fat:28,cost:5.20,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; congèle la sauce et les boulettes à part des spaghetti si possible.',ingredients:[
+[250,'g','Bœuf haché 5 %'],[175,'g','Spaghetti secs'],[300,'g','Tomates concassées'],[100,'g','Coulis de tomate'],[1,'pièce','Oignon'],[2,'gousse','Ail'],[20,'g','Chapelure'],[1,'pièce','Œuf'],[15,'g','Parmesan râpé'],[10,'ml','Huile d’olive'],[2,'g','Origan séché'],[1,'g','Paprika doux'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'8 min — Mélange le bœuf, l’œuf, la chapelure, la moitié du parmesan, l’origan, le sel et le poivre. Mélange juste assez pour lier puis forme 8 à 10 boulettes.',
+'5 min — Émince l’oignon et hache l’ail. Prépare les tomates concassées et le coulis dans un bol.',
+'8 min — Fais chauffer l’huile dans une sauteuse. Dore les boulettes sur toutes les faces 6 à 8 min en les retournant délicatement. Réserve-les.',
+'4 min — Dans la même sauteuse, fais revenir l’oignon 3 min, ajoute l’ail et le paprika 30 secondes.',
+'15 min — Verse les tomates concassées et le coulis. Ajoute l’origan, mélange et laisse mijoter 5 min avant de remettre les boulettes. Couvre partiellement et cuis encore 10 min à feu doux.',
+'10 min — Pendant ce temps, cuis les spaghetti dans l’eau bouillante salée selon le paquet. Égoutte-les en réservant un peu d’eau de cuisson.',
+'3 min — Mélange les spaghetti avec une louche de sauce et un peu d’eau de cuisson. Vérifie que les boulettes sont cuites à cœur.',
+'2 min — Répartis les pâtes, les boulettes et la sauce. Termine avec le parmesan restant.'
+]},
+24:{time:50,kcal:990,protein:86,carbs:105,fat:26,cost:5.30,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; réchauffe les potatoes au four ou à l’air fryer pour retrouver du croustillant.',ingredients:[
+[240,'g','Blanc de poulet'],[300,'g','Pommes de terre'],[150,'g','Poivron'],[80,'g','Yaourt grec nature'],[10,'ml','Huile d’olive'],[5,'g','Paprika fumé'],[3,'g','Cumin moulu'],[2,'g','Ail en poudre'],[2,'g','Origan séché'],[10,'ml','Jus de citron'],[1,'g','Miel'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'10 min — Préchauffe le four à 220 °C ou l’air fryer à 200 °C. Coupe les pommes de terre en quartiers fins de taille égale et éponge-les.',
+'3 min — Mélange les potatoes avec l’huile, le paprika, le cumin, l’ail en poudre, l’origan, le sel et le poivre. Étale-les sans les superposer.',
+'25 min — Enfourne 22 à 25 min à 220 °C en retournant à mi-cuisson, ou cuis 18 à 22 min à 200 °C dans l’air fryer en secouant le panier deux fois.',
+'5 min — Coupe le poulet en lanières. Mélange-le avec la moitié du mélange d’épices, le jus de citron et le miel.',
+'8 min — Fais griller le poulet dans une poêle chaude 7 à 8 min en remuant jusqu’à cuisson à cœur. Ne surcharge pas la poêle ; cuis en deux fois si nécessaire.',
+'3 min — Mélange le yaourt avec une pincée de paprika, du sel et un peu de citron pour faire une sauce fraîche et épaisse.',
+'2 min — Répartis le poulet, les potatoes et le poivron coupé en lanières fines. Ajoute la sauce à part pour garder les potatoes croustillantes.'
+]},
+25:{time:35,kcal:1010,protein:80,carbs:130,fat:22,cost:5.00,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; ajoute un trait d’eau lors du réchauffage pour détendre le glaçage.',ingredients:[
+[240,'g','Filet de porc'],[100,'g','Riz cru'],[150,'g','Carotte'],[30,'ml','Sauce soja'],[25,'g','Miel'],[10,'ml','Vinaigre de riz'],[1,'gousse','Ail'],[5,'g','Gingembre frais'],[5,'g','Maïzena'],[10,'ml','Huile neutre'],[80,'ml','Eau'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Coupe le porc en fines lamelles. Coupe les carottes en julienne. Hache l’ail et râpe le gingembre.',
+'3 min — Dans un bol, fouette la sauce soja, le miel, le vinaigre de riz, la Maïzena et l’eau. La Maïzena doit être totalement dissoute.',
+'6 min — Chauffe l’huile dans une poêle très chaude. Fais saisir le porc en deux fois 2 à 3 min par fournée pour le colorer sans le faire bouillir. Réserve.',
+'5 min — Fais sauter les carottes 4 min dans la même poêle. Ajoute l’ail et le gingembre 30 secondes.',
+'3 min — Remets le porc, verse la sauce et mélange à feu moyen 2 à 3 min jusqu’à ce qu’elle épaississe et forme un glaçage brillant.',
+'2 min — Goûte, poivre si besoin et répartis le riz avec le porc caramélisé et les carottes.'
+]},
+26:{time:30,kcal:1110,protein:85,carbs:136,fat:29,cost:5.40,storage:'2 à 3 jours au réfrigérateur. Congélation possible 1 mois ; réchauffe doucement avec un trait de lait ou d’eau.',ingredients:[
+[240,'g','Blanc de poulet'],[250,'g','Gnocchis frais'],[150,'g','Épinards frais'],[100,'ml','Crème légère'],[30,'g','Parmesan râpé'],[1,'gousse','Ail'],[0.5,'pièce','Oignon'],[10,'ml','Huile d’olive'],[80,'ml','Bouillon de volaille'],[1,'pincée','Muscade'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Coupe le poulet en morceaux de 2 cm. Émince l’oignon et hache l’ail. Rince les épinards.',
+'7 min — Fais dorer le poulet dans l’huile chaude 6 à 7 min à feu moyen-vif. Réserve-le dès qu’il est coloré.',
+'3 min — Dans la même poêle, fais revenir l’oignon 2 min puis l’ail 30 secondes. Verse le bouillon et gratte les sucs.',
+'4 min — Ajoute la crème, la muscade et le poivre. Laisse frémir 2 min puis incorpore le parmesan pour obtenir une sauce lisse.',
+'5 min — Ajoute les gnocchis directement dans la sauce avec 50 ml d’eau. Couvre et cuis 4 à 5 min en remuant une fois, jusqu’à ce qu’ils soient tendres.',
+'3 min — Ajoute les épinards par poignées et laisse-les tomber 2 min. Remets le poulet et cuis encore 2 min jusqu’à ce qu’il soit cuit à cœur.',
+'2 min — Goûte, ajuste l’assaisonnement et répartis immédiatement avec toute la sauce.'
+]},
+27:{time:40,kcal:1010,protein:85,carbs:109,fat:25,cost:5.00,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; la sauce au yaourt peut légèrement grainer, réchauffe à feu doux.',ingredients:[
+[240,'g','Émincé de dinde'],[100,'g','Riz cru'],[180,'g','Courgette'],[120,'g','Carotte'],[120,'ml','Yaourt grec nature'],[100,'ml','Bouillon de volaille'],[15,'g','Pâte de curry douce'],[1,'pièce','Oignon'],[2,'gousse','Ail'],[5,'g','Gingembre frais'],[10,'ml','Huile d’olive'],[10,'g','Coriandre fraîche'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince et cuis le riz dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Coupe la dinde en lamelles, la carotte en fines demi-rondelles et la courgette en dés. Émince l’oignon et hache ail et gingembre.',
+'2 min — Dans un bol, mélange le yaourt avec la pâte de curry. Détends avec 2 c. à s. de bouillon pour éviter que le yaourt ne fasse des grumeaux plus tard.',
+'6 min — Chauffe l’huile dans une sauteuse. Fais revenir oignon, ail et gingembre 3 min, puis ajoute la dinde et fais-la dorer 3 min.',
+'5 min — Ajoute les carottes et le reste du bouillon. Couvre 3 min, puis ajoute la courgette et cuis encore 2 min.',
+'7 min — Baisse le feu au minimum. Incorpore le yaourt au curry en remuant ; ne laisse pas bouillir. Fais chauffer doucement 5 à 6 min jusqu’à ce que la dinde soit cuite à cœur et la sauce nappante.',
+'2 min — Ajoute la coriandre, ajuste sel et poivre, puis répartis le riz et la dinde au curry.'
+]},
+28:{time:45,kcal:1040,protein:73,carbs:94,fat:39,cost:7.40,storage:'2 jours au réfrigérateur. Congélation possible 1 mois ; le saumon reste meilleur fraîchement cuit, ajoute le citron après réchauffage.',ingredients:[
+[240,'g','Saumon frais'],[300,'g','Pommes de terre'],[220,'g','Haricots verts'],[1,'pièce','Citron jaune'],[15,'ml','Huile d’olive'],[15,'g','Beurre'],[10,'g','Aneth frais'],[1,'gousse','Ail'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'10 min — Préchauffe le four à 200 °C. Coupe les pommes de terre en petits quartiers et mélange-les avec la moitié de l’huile, du sel et du poivre.',
+'25 min — Rôtis les pommes de terre 22 à 25 min à 200 °C en les retournant une fois, jusqu’à ce qu’elles soient dorées et fondantes.',
+'8 min — Fais cuire les haricots verts 7 à 8 min dans l’eau bouillante salée ou à la vapeur. Égoutte-les et garde-les au chaud.',
+'3 min — Assaisonne le saumon avec sel, poivre, zeste de citron et un filet de jus. Hache l’ail et l’aneth.',
+'7 min — Fais chauffer le reste d’huile dans une poêle antiadhésive. Dépose le saumon côté peau si présent et cuis 4 min, puis retourne 2 à 3 min selon l’épaisseur. Le cœur doit rester moelleux et atteindre la cuisson souhaitée.',
+'2 min — Ajoute le beurre, l’ail et l’aneth dans la poêle, arrose le saumon avec le beurre mousseux 30 secondes puis coupe le feu.',
+'2 min — Répartis pommes de terre et haricots. Ajoute le saumon et un quartier de citron.'
+]},
+29:{time:40,kcal:1050,protein:76,carbs:108,fat:31,cost:6.20,storage:'3 jours au réfrigérateur. Congélation possible 1 mois ; congèle la sauce sans la crème si possible et ajoute celle-ci à la remise en température.',ingredients:[
+[240,'g','Bœuf émincé'],[100,'g','Riz cru'],[250,'g','Champignons de Paris'],[100,'ml','Crème fraîche épaisse'],[60,'ml','Bouillon de bœuf'],[1,'pièce','Oignon'],[1,'gousse','Ail'],[10,'g','Moutarde douce'],[10,'ml','Huile d’olive'],[3,'g','Paprika doux'],[10,'g','Cornichons'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Émince le bœuf en lamelles fines perpendiculairement aux fibres. Coupe les champignons en quartiers, émince l’oignon et hache l’ail.',
+'4 min — Chauffe l’huile dans une grande poêle très chaude. Saisis le bœuf en deux fois 1 à 2 min par fournée pour le colorer sans le surcuire. Réserve.',
+'6 min — Fais revenir les champignons à feu vif jusqu’à évaporation de leur eau, puis ajoute l’oignon et fais cuire 3 min.',
+'2 min — Ajoute l’ail et le paprika 30 secondes. Verse le bouillon et gratte les sucs.',
+'4 min — Incorpore la crème et la moutarde. Laisse frémir doucement 3 min jusqu’à ce que la sauce nappe la cuillère.',
+'2 min — Remets le bœuf et les cornichons finement émincés. Réchauffe 1 à 2 min sans faire bouillir fort pour garder la viande tendre.',
+'2 min — Répartis le riz et le bœuf stroganoff, puis poivre au moment de servir.'
+]},
+30:{time:35,kcal:1000,protein:85,carbs:110,fat:22,cost:5.00,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; la semoule se raffermit, ajoute 1 à 2 c. à s. d’eau au réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Semoule sèche'],[180,'g','Courgette'],[100,'ml','Bouillon de volaille'],[80,'g','Yaourt grec nature'],[10,'ml','Huile d’olive'],[5,'g','Paprika fumé'],[3,'g','Cumin moulu'],[2,'g','Ail en poudre'],[1,'g','Coriandre moulue'],[10,'ml','Jus de citron'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Coupe le poulet en cubes de 3 cm et la courgette en demi-lunes. Mélange le paprika, le cumin, l’ail en poudre, la coriandre, sel et poivre.',
+'3 min — Mélange le poulet avec la moitié des épices et le jus de citron. Laisse reposer pendant que tu prépares la semoule.',
+'5 min — Porte le bouillon à ébullition. Verse-le sur la semoule, couvre 5 min puis égrène avec une fourchette et 1 c. à c. d’huile.',
+'8 min — Chauffe le reste d’huile dans une poêle. Fais dorer le poulet 6 à 8 min à feu moyen-vif en le retournant jusqu’à ce qu’il soit cuit à cœur. Réserve.',
+'6 min — Fais sauter les courgettes 5 à 6 min dans la même poêle avec le reste des épices. Ajoute une cuillère d’eau si nécessaire.',
+'2 min — Mélange le yaourt avec une pincée de sel, du poivre et un peu de citron pour former une sauce épaisse.',
+'2 min — Répartis la semoule, le poulet et les courgettes. Ajoute la sauce yaourt à part.'
+]},
+31:{time:30,kcal:1040,protein:82,carbs:135,fat:25,cost:4.80,storage:'2 jours au réfrigérateur. Congélation déconseillée après ajout de mozzarella ; garde le fromage à part et ajoute-le au service.',ingredients:[
+[160,'g','Thon au naturel égoutté'],[175,'g','Penne sèches'],[150,'g','Tomates cerises'],[100,'g','Mozzarella'],[150,'g','Coulis de tomate'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[10,'g','Basilic frais'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Égoutte soigneusement le thon et émiette-le grossièrement. Coupe les tomates cerises en deux, hache l’ail et déchire la mozzarella en morceaux.',
+'10 min — Fais cuire les penne dans l’eau bouillante salée selon le paquet en les gardant al dente. Réserve 80 ml d’eau de cuisson puis égoutte.',
+'4 min — Chauffe l’huile dans une poêle. Fais revenir l’ail 30 secondes puis ajoute les tomates cerises et cuis 3 min pour qu’elles commencent à éclater.',
+'5 min — Ajoute le coulis, sale et poivre. Laisse mijoter 4 à 5 min pour réduire légèrement.',
+'2 min — Incorpore le thon et mélange doucement 1 min pour le réchauffer sans le réduire en purée.',
+'3 min — Ajoute les penne et un peu d’eau de cuisson. Mélange pour bien enrober puis coupe le feu.',
+'2 min — Ajoute la mozzarella et le basilic juste avant de répartir. Garde quelques morceaux de mozzarella pour le dessus.'
+]},
+32:{time:45,kcal:1100,protein:82,carbs:136,fat:31,cost:4.80,storage:'3 jours au réfrigérateur. Congélation possible 1 mois ; la crème peut se séparer légèrement, mélange au réchauffage.',ingredients:[
+[150,'g','Jambon blanc'],[175,'g','Penne sèches'],[220,'g','Brocoli'],[120,'ml','Crème légère'],[50,'ml','Lait'],[40,'g','Emmental râpé'],[15,'g','Parmesan râpé'],[10,'g','Farine'],[10,'g','Beurre'],[1,'pincée','Muscade'],[1,'pincée','Poivre noir'],[1,'pincée','Sel']
+],steps:[
+'10 min — Préchauffe le four à 190 °C. Détaille le brocoli en petits bouquets et coupe le jambon en lanières.',
+'5 min — Fais blanchir le brocoli 4 à 5 min dans l’eau bouillante salée. Égoutte-le bien et réserve.',
+'8 min — Fais cuire les penne 2 min de moins que le temps indiqué. Égoutte-les et garde une petite louche d’eau de cuisson.',
+'5 min — Dans une casserole, fais fondre le beurre, ajoute la farine et fouette 1 min. Verse le lait progressivement puis la crème en fouettant.',
+'4 min — Ajoute la moitié de l’emmental, le parmesan, la muscade, le poivre et une pincée de sel. Laisse épaissir 2 à 3 min sans bouillir fortement.',
+'3 min — Mélange pâtes, brocoli et jambon avec la sauce. Ajoute une cuillère d’eau de cuisson si le mélange paraît trop épais.',
+'20 min — Verse dans un plat, parsème du reste d’emmental et enfourne 18 à 20 min à 190 °C jusqu’à ce que le dessus soit gratiné.',
+'5 min — Laisse reposer 5 min puis répartis en portions généreuses.'
+]},
+33:{time:45,kcal:1020,protein:79,carbs:124,fat:23,cost:5.00,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; réchauffe le couscous avec une cuillère d’eau.',ingredients:[
+[240,'g','Dinde hachée'],[100,'g','Semoule sèche'],[150,'g','Carotte'],[100,'g','Courgette'],[150,'g','Coulis de tomate'],[1,'pièce','Oignon'],[1,'gousse','Ail'],[20,'g','Chapelure'],[1,'pièce','Œuf'],[10,'ml','Huile d’olive'],[3,'g','Cumin moulu'],[2,'g','Paprika doux'],[100,'ml','Bouillon de volaille'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'8 min — Mélange la dinde hachée avec l’œuf, la chapelure, la moitié du cumin, le paprika, sel et poivre. Forme 8 boulettes de taille égale avec les mains légèrement humides.',
+'5 min — Coupe la carotte en petits dés et la courgette en demi-lunes. Émince l’oignon et hache l’ail.',
+'7 min — Chauffe l’huile dans une sauteuse et fais dorer les boulettes sur toutes les faces 6 à 7 min. Réserve-les.',
+'4 min — Fais revenir l’oignon et la carotte 3 min dans la même sauteuse. Ajoute l’ail et le reste de cumin 30 secondes.',
+'3 min — Verse le coulis et le bouillon. Ajoute la courgette, mélange puis replace les boulettes dans la sauce.',
+'15 min — Couvre partiellement et laisse mijoter 12 à 15 min à feu doux jusqu’à cuisson complète des boulettes (74 °C à cœur) et légumes tendres.',
+'5 min — Pendant ce temps, verse 100 ml d’eau bouillante salée sur la semoule, couvre 5 min puis égrène à la fourchette.',
+'2 min — Répartis la semoule, les boulettes et les légumes avec la sauce tomate.'
+]},
+34:{time:35,kcal:1020,protein:84,carbs:128,fat:22,cost:5.00,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; garde la sauce yaourt à part et ajoute-la après réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Riz cru'],[220,'g','Poivrons rouge et jaune'],[80,'g','Maïs égoutté'],[80,'g','Yaourt grec nature'],[10,'ml','Huile d’olive'],[5,'g','Paprika fumé'],[3,'g','Cumin moulu'],[2,'g','Ail en poudre'],[10,'ml','Jus de citron vert'],[10,'g','Coriandre fraîche'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Coupe le poulet en lamelles et les poivrons en lanières. Égoutte le maïs. Mélange paprika, cumin, ail en poudre, sel et poivre.',
+'2 min — Mélange le poulet avec la moitié des épices et un peu de jus de citron vert.',
+'7 min — Fais chauffer l’huile dans une grande poêle. Fais dorer le poulet 6 à 7 min à feu vif jusqu’à cuisson à cœur. Réserve.',
+'6 min — Fais sauter les poivrons 5 à 6 min avec le reste des épices. Ajoute le maïs à la dernière minute.',
+'2 min — Mélange le yaourt avec le jus de citron restant et la coriandre ciselée. Ajuste le sel.',
+'2 min — Répartis le riz, le poulet et les poivrons dans le bowl. Ajoute la sauce à part pour le batch.'
+]},
+35:{time:40,kcal:1120,protein:78,carbs:142,fat:27,cost:5.20,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; garde avocat et garnitures fraîches à part si tu en ajoutes.',ingredients:[
+[240,'g','Bœuf haché 5 %'],[100,'g','Riz cru'],[120,'g','Haricots noirs égouttés'],[80,'g','Maïs égoutté'],[150,'g','Tomates concassées'],[0.5,'pièce','Poivron'],[0.5,'pièce','Oignon'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[3,'g','Paprika fumé'],[2,'g','Cumin moulu'],[10,'ml','Jus de citron vert'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Émince l’oignon, hache l’ail et coupe le poivron en petits dés. Rince et égoutte les haricots noirs et le maïs.',
+'5 min — Fais chauffer l’huile dans une poêle. Fais revenir l’oignon et le poivron 4 min, puis ajoute l’ail 30 secondes.',
+'6 min — Ajoute le bœuf haché, le paprika et le cumin. Fais dorer 5 à 6 min en émiettant la viande.',
+'10 min — Ajoute les tomates concassées, les haricots et le maïs. Laisse mijoter 8 à 10 min jusqu’à ce que le mélange soit épais et non aqueux.',
+'2 min — Ajoute le jus de citron vert, goûte et ajuste le sel et le poivre.',
+'2 min — Répartis le riz et le mélange bœuf-haricots dans les contenants.'
+]},
+36:{time:35,kcal:1080,protein:82,carbs:136,fat:23,cost:5.40,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; ajoute un trait d’eau au réchauffage pour détendre la sauce teriyaki.',ingredients:[
+[240,'g','Bœuf émincé'],[150,'g','Nouilles chinoises sèches'],[250,'g','Brocoli'],[30,'ml','Sauce soja'],[20,'g','Miel'],[10,'ml','Vinaigre de riz'],[8,'g','Maïzena'],[100,'ml','Eau'],[10,'ml','Huile de sésame'],[2,'gousse','Ail'],[5,'g','Gingembre frais'],[10,'g','Graines de sésame']
+],steps:[
+'5 min — Coupe le bœuf en fines lamelles perpendiculaires aux fibres. Détaille le brocoli en petits bouquets et hache l’ail.',
+'3 min — Dans un bol, mélange sauce soja, miel, vinaigre de riz, Maïzena et eau. Fouette pour dissoudre complètement la fécule.',
+'5 min — Fais blanchir le brocoli 3 min dans de l’eau bouillante, puis égoutte-le. Il terminera sa cuisson dans le wok.',
+'6 min — Fais cuire les nouilles selon le paquet, en les gardant fermes. Égoutte-les et réserve une louche d’eau de cuisson.',
+'4 min — Chauffe l’huile de sésame dans un wok très chaud. Saisis le bœuf en deux fois 1 à 2 min par fournée puis réserve.',
+'2 min — Fais revenir l’ail et le gingembre 30 secondes, ajoute le brocoli et fais sauter 1 min.',
+'3 min — Remue la sauce puis verse-la dans le wok. Fais épaissir 1 à 2 min jusqu’à ce qu’elle devienne brillante.',
+'3 min — Remets le bœuf et les nouilles, ajoute un peu d’eau de cuisson et mélange 2 min pour tout enrober. Termine avec les graines de sésame.'
+]},
+37:{time:40,kcal:1050,protein:77,carbs:138,fat:23,cost:5.10,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; conserve les épinards et la sauce avec l’orzo pour éviter qu’il ne sèche.',ingredients:[
+[240,'g','Boulettes de dinde'],[150,'g','Orzo sec'],[150,'g','Épinards frais'],[200,'g','Tomates concassées'],[100,'ml','Bouillon de volaille'],[0.5,'pièce','Oignon'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[15,'g','Parmesan râpé'],[2,'g','Origan séché'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Émince l’oignon et hache l’ail. Prépare le bouillon et les tomates concassées.',
+'7 min — Chauffe l’huile dans une sauteuse et fais dorer les boulettes sur toutes les faces 6 à 7 min. Réserve-les.',
+'4 min — Fais revenir l’oignon 3 min dans la sauteuse, ajoute l’ail et l’origan 30 secondes.',
+'2 min — Verse les tomates et le bouillon, mélange et porte à frémissement.',
+'12 min — Ajoute l’orzo sec et remue. Laisse cuire 10 à 12 min à feu doux en remuant régulièrement ; ajoute 30 à 50 ml d’eau si le liquide est absorbé trop vite.',
+'7 min — Remets les boulettes dans la sauteuse, couvre et laisse cuire 6 à 7 min jusqu’à cuisson complète. Incorpore les épinards dans les 2 dernières minutes.',
+'2 min — Ajoute le parmesan, rectifie l’assaisonnement et répartis immédiatement.'
+]},
+38:{time:60,kcal:990,protein:84,carbs:104,fat:26,cost:5.20,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; réchauffe les pommes grenailles au four pour retrouver leur texture.',ingredients:[
+[240,'g','Dinde hachée'],[300,'g','Pommes de terre grenaille'],[150,'g','Carotte'],[1,'pièce','Œuf'],[25,'g','Chapelure'],[1,'pièce','Échalote'],[10,'g','Moutarde'],[10,'ml','Huile d’olive'],[2,'g','Thym séché'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'10 min — Préchauffe le four à 210 °C. Lave les grenailles et coupe les plus grosses en deux. Coupe les carottes en biseaux de 1 cm.',
+'3 min — Mélange les pommes de terre et les carottes avec la moitié de l’huile, le thym, le sel et le poivre. Étale sur une plaque.',
+'30 min — Rôtis les légumes 28 à 30 min à 210 °C en les retournant à mi-cuisson.',
+'6 min — Mélange la dinde hachée avec l’œuf, la chapelure, l’échalote finement hachée, la moutarde, sel et poivre. Forme un petit pain compact.',
+'3 min — Dépose le pain de dinde dans un petit plat huilé. Badigeonne légèrement d’huile et de moutarde.',
+'25 min — Enfourne à côté des légumes 22 à 25 min à 190-200 °C selon l’épaisseur, jusqu’à 74 °C à cœur. Laisse reposer 5 min avant de trancher.',
+'2 min — Répartis les tranches de pain de dinde et les pommes grenailles avec les carottes.'
+]},
+39:{time:30,kcal:1110,protein:84,carbs:136,fat:29,cost:5.60,storage:'2 à 3 jours au réfrigérateur. Congélation possible 1 mois ; garde le pesto à part si possible et mélange au réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[250,'g','Gnocchis frais'],[30,'g','Pesto vert'],[150,'g','Tomates cerises'],[20,'g','Parmesan râpé'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[30,'ml','Eau de cuisson'],[10,'g','Basilic frais'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Coupe le poulet en cubes et les tomates cerises en deux. Hache l’ail.',
+'7 min — Fais dorer le poulet dans l’huile chaude 6 à 7 min en remuant jusqu’à cuisson complète. Réserve.',
+'4 min — Fais revenir l’ail 30 secondes dans la poêle puis ajoute les tomates cerises. Fais-les cuire 3 min jusqu’à ce qu’elles commencent à éclater.',
+'5 min — Ajoute les gnocchis et 3 c. à s. d’eau. Couvre 3 min, puis découvre et fais dorer 2 min en remuant.',
+'2 min — Dans un bol, mélange le pesto, le parmesan et l’eau chaude jusqu’à obtenir une sauce fluide.',
+'3 min — Remets le poulet, verse la sauce pesto et mélange 2 à 3 min à feu doux pour enrober les gnocchis sans faire cuire le pesto trop fort.',
+'2 min — Ajoute le basilic, goûte et répartis.'
+]},
+40:{time:50,kcal:1030,protein:84,carbs:95,fat:31,cost:6.50,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; congèle la viande et les pommes de terre séparément si possible.',ingredients:[
+[250,'g','Filet mignon de porc'],[300,'g','Pommes de terre'],[220,'g','Haricots verts'],[20,'g','Moutarde à l’ancienne'],[80,'ml','Crème fraîche légère'],[100,'ml','Bouillon de volaille'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[5,'g','Thym frais'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'10 min — Préchauffe le four à 200 °C. Coupe les pommes de terre en petits quartiers, mélange avec la moitié de l’huile, sel, poivre et thym.',
+'30 min — Rôtis les pommes de terre 25 à 30 min à 200 °C en les retournant une fois.',
+'5 min — Coupe le filet mignon en médaillons épais de 2 à 3 cm. Sale et poivre légèrement.',
+'6 min — Chauffe le reste d’huile dans une poêle. Saisis les médaillons 2 à 3 min par face jusqu’à coloration. Réserve-les.',
+'4 min — Déglace la poêle avec le bouillon en grattant les sucs. Ajoute l’ail haché et laisse réduire 2 min.',
+'4 min — Baisse le feu et incorpore la crème et la moutarde. Mélange jusqu’à obtenir une sauce homogène, sans ébullition forte.',
+'6 min — Remets le porc dans la sauce et laisse cuire doucement 4 à 6 min selon l’épaisseur, jusqu’à cuisson complète. Fais cuire les haricots à la vapeur 6 à 8 min en parallèle.',
+'2 min — Répartis pommes de terre, haricots et médaillons nappés de sauce.'
+]},
+41:{time:35,kcal:1000,protein:86,carbs:120,fat:22,cost:5.10,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; ajoute un peu d’eau à la semoule au réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Semoule sèche'],[180,'g','Courgette'],[100,'ml','Bouillon de volaille'],[1,'pièce','Citron jaune'],[10,'ml','Huile d’olive'],[3,'g','Origan séché'],[1,'gousse','Ail'],[10,'g','Persil frais'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Coupe le poulet en morceaux de 3 cm. Coupe la courgette en demi-lunes et hache l’ail.',
+'3 min — Mélange le poulet avec le zeste du citron, la moitié du jus, l’origan, l’ail, sel et poivre. Laisse mariner 5 min.',
+'5 min — Porte le bouillon à ébullition et verse-le sur la semoule. Couvre 5 min puis égrène à la fourchette avec une cuillère d’huile.',
+'7 min — Chauffe une poêle avec le reste d’huile. Fais dorer le poulet 6 à 7 min à feu moyen-vif jusqu’à 74 °C à cœur. Réserve.',
+'6 min — Fais sauter les courgettes 5 à 6 min dans la même poêle. Ajoute une cuillère d’eau si elles accrochent.',
+'2 min — Remets le poulet avec son jus dans la poêle, ajoute le reste de citron et le persil. Mélange hors du feu.',
+'2 min — Répartis la semoule citronnée, les courgettes et le poulet.'
+]},
+42:{time:45,kcal:1050,protein:73,carbs:122,fat:29,cost:4.90,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; la patate douce et le chili se congèlent bien ensemble.',ingredients:[
+[240,'g','Bœuf haché 5 %'],[300,'g','Patate douce'],[120,'g','Haricots rouges égouttés'],[200,'g','Tomates concassées'],[30,'g','Concentré de tomate'],[0.5,'pièce','Poivron rouge'],[0.5,'pièce','Oignon'],[1,'gousse','Ail'],[10,'ml','Huile d’olive'],[3,'g','Paprika fumé'],[3,'g','Cumin moulu'],[100,'ml','Bouillon de bœuf'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'7 min — Épluche la patate douce et coupe-la en cubes de 2 cm. Émince l’oignon, hache l’ail et coupe le poivron en dés.',
+'6 min — Fais chauffer l’huile dans une cocotte. Fais revenir l’oignon et le poivron 5 min, puis ajoute l’ail 30 secondes.',
+'6 min — Ajoute le bœuf haché, émiette-le et fais-le dorer 5 à 6 min. Incorpore paprika et cumin.',
+'2 min — Ajoute le concentré de tomate et mélange 1 min pour le faire torréfier légèrement.',
+'15 min — Verse les tomates et le bouillon, ajoute la patate douce et couvre partiellement. Laisse mijoter 12 à 15 min en remuant de temps en temps.',
+'5 min — Ajoute les haricots rouges égouttés et cuis encore 5 min. La patate douce doit être tendre mais ne pas se défaire complètement.',
+'2 min — Goûte, ajuste sel et poivre et répartis le chili en portions généreuses.'
+]},
+43:{time:40,kcal:1080,protein:75,carbs:128,fat:34,cost:7.10,storage:'2 jours au réfrigérateur. Congélation possible 1 mois, mais les poireaux et la crème peuvent perdre un peu de texture.',ingredients:[
+[200,'g','Saumon frais'],[175,'g','Tagliatelles sèches'],[200,'g','Poireaux'],[100,'ml','Crème fraîche liquide'],[1,'pièce','Échalote'],[1,'gousse','Ail'],[1,'pièce','Citron jaune'],[15,'g','Aneth frais'],[10,'ml','Huile d’olive'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Coupe le saumon en gros cubes, émince finement les poireaux et l’échalote. Hache l’ail et prélève le zeste du citron.',
+'10 min — Fais cuire les tagliatelles dans l’eau bouillante salée selon le paquet. Réserve 100 ml d’eau de cuisson avant d’égoutter.',
+'7 min — Chauffe l’huile dans une poêle. Fais revenir les poireaux et l’échalote 6 à 7 min à feu moyen avec une cuillère d’eau, jusqu’à ce qu’ils soient fondants.',
+'2 min — Ajoute l’ail 30 secondes puis verse la crème, le zeste de citron et 50 ml d’eau de cuisson. Laisse frémir 2 min.',
+'5 min — Ajoute les cubes de saumon dans la sauce et cuis doucement 3 à 5 min selon leur taille, en les retournant délicatement. Ils doivent être juste cuits.',
+'2 min — Ajoute le jus d’un demi-citron, l’aneth et le poivre. Goûte avant de saler.',
+'3 min — Incorpore les tagliatelles à la sauce. Ajuste la texture avec le reste d’eau de cuisson puis répartis sans écraser le saumon.'
+]},
+44:{time:45,kcal:1040,protein:81,carbs:140,fat:20,cost:4.80,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; réchauffe les pâtes avec un petit trait d’eau.',ingredients:[
+[240,'g','Dinde hachée'],[175,'g','Spaghetti secs'],[300,'g','Coulis de tomate'],[150,'g','Tomates concassées'],[1,'pièce','Carotte'],[0.5,'pièce','Oignon'],[2,'gousse','Ail'],[10,'ml','Huile d’olive'],[15,'g','Concentré de tomate'],[2,'g','Origan séché'],[15,'g','Parmesan râpé'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'7 min — Coupe la carotte en très petits dés. Émince l’oignon et hache l’ail pour qu’ils fondent dans la sauce.',
+'5 min — Chauffe l’huile dans une sauteuse. Fais revenir carotte et oignon 4 à 5 min à feu moyen puis ajoute l’ail 30 secondes.',
+'7 min — Ajoute la dinde hachée et fais-la dorer 6 à 7 min en l’émiettant finement à la spatule.',
+'2 min — Incorpore le concentré de tomate et l’origan. Mélange 1 min pour concentrer les arômes.',
+'18 min — Verse le coulis et les tomates concassées avec 80 ml d’eau. Laisse mijoter 15 à 18 min à feu doux en remuant de temps en temps.',
+'10 min — Fais cuire les spaghetti dans l’eau bouillante salée selon le paquet. Égoutte-les en réservant une petite tasse d’eau de cuisson.',
+'3 min — Mélange les spaghetti et la sauce dans la sauteuse avec un peu d’eau de cuisson jusqu’à obtenir des pâtes bien enrobées.',
+'2 min — Répartis et termine avec le parmesan.'
+]},
+45:{time:35,kcal:1100,protein:88,carbs:129,fat:29,cost:5.90,storage:'3 jours au réfrigérateur. Congélation possible 1 mois ; ajoute un peu de crème ou d’eau au réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[150,'g','Orzo sec'],[150,'g','Épinards frais'],[30,'g','Tomates séchées'],[100,'ml','Crème légère'],[100,'ml','Bouillon de volaille'],[20,'g','Parmesan râpé'],[0.5,'pièce','Oignon'],[2,'gousse','Ail'],[10,'ml','Huile d’olive'],[2,'g','Paprika doux'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Coupe le poulet en cubes, émince l’oignon et hache l’ail. Coupe les tomates séchées en fines lanières.',
+'6 min — Fais chauffer l’huile dans une sauteuse et fais dorer le poulet 5 à 6 min. Réserve-le sur une assiette.',
+'3 min — Fais revenir l’oignon 2 min dans les sucs, ajoute l’ail et le paprika 30 secondes.',
+'2 min — Ajoute l’orzo sec et remue 1 min pour l’enrober d’huile et d’arômes.',
+'12 min — Verse le bouillon et la crème, ajoute les tomates séchées. Laisse cuire 10 à 12 min à feu doux en remuant souvent ; ajoute un peu d’eau si l’orzo absorbe trop vite.',
+'4 min — Remets le poulet et son jus dans la sauteuse. Ajoute les épinards et laisse-les tomber 2 à 3 min.',
+'2 min — Hors du feu, incorpore le parmesan. Goûte, ajuste sel et poivre et répartis.'
+]},
+46:{time:40,kcal:990,protein:72,carbs:98,fat:30,cost:4.70,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; réchauffe en ajoutant un peu de bouillon si les haricots ont absorbé le jus.',ingredients:[
+[240,'g','Saucisses de volaille'],[200,'g','Haricots blancs égouttés'],[250,'g','Tomates concassées'],[0.5,'pièce','Oignon'],[1,'gousse','Ail'],[100,'ml','Bouillon de légumes'],[10,'ml','Huile d’olive'],[2,'g','Thym séché'],[1,'g','Paprika fumé'],[1,'pincée','Poivre noir'],[1,'pincée','Sel']
+],steps:[
+'5 min — Coupe les saucisses en tronçons de 3 cm. Émince l’oignon, hache l’ail et rince les haricots blancs.',
+'7 min — Chauffe l’huile dans une sauteuse et fais dorer les saucisses sur toutes les faces 6 à 7 min. Réserve.',
+'4 min — Fais revenir l’oignon dans la même sauteuse 3 min. Ajoute l’ail, le thym et le paprika 30 secondes.',
+'3 min — Verse les tomates concassées et le bouillon. Mélange et porte à frémissement.',
+'12 min — Remets les saucisses et laisse mijoter 10 à 12 min à feu doux, jusqu’à cuisson complète.',
+'5 min — Ajoute les haricots blancs et laisse chauffer 4 à 5 min sans trop remuer pour ne pas les écraser.',
+'2 min — Goûte, ajuste sel et poivre et répartis avec le jus de tomate.'
+]},
+47:{time:35,kcal:1030,protein:88,carbs:115,fat:23,cost:5.10,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; garde la sauce yaourt séparée et ajoute-la après réchauffage.',ingredients:[
+[240,'g','Blanc de poulet'],[100,'g','Riz basmati cru'],[120,'g','Yaourt grec nature'],[10,'g','Pâte tandoori'],[10,'g','Gingembre frais'],[2,'gousse','Ail'],[10,'ml','Jus de citron'],[150,'g','Concombre'],[10,'ml','Huile d’olive'],[10,'g','Menthe fraîche'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'12 min — Rince le riz basmati et cuis-le dans 200 ml d’eau salée, couvert, 10 à 12 min. Laisse reposer 5 min.',
+'5 min — Coupe le poulet en gros cubes. Râpe le gingembre et hache l’ail.',
+'3 min — Mélange le yaourt, la pâte tandoori, le gingembre, l’ail, le jus de citron et une pincée de sel. Enrobe le poulet et laisse mariner au moins 10 min au frais si possible.',
+'8 min — Chauffe l’huile dans une poêle. Retire l’excédent de marinade du poulet et fais-le dorer 7 à 8 min à feu moyen en le retournant jusqu’à cuisson complète.',
+'3 min — Coupe le concombre en petits dés. Mélange-le avec la menthe ciselée, une pincée de sel et un trait de citron pour une garniture fraîche.',
+'2 min — Répartis le riz et le poulet tandoori. Garde le concombre à part pour éviter qu’il ne détrempe le plat au stockage.'
+]},
+48:{time:50,kcal:1100,protein:77,carbs:116,fat:35,cost:5.20,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; purée et sauce brune se congèlent séparément.',ingredients:[
+[250,'g','Boulettes de bœuf'],[300,'g','Pommes de terre'],[150,'g','Carotte'],[150,'ml','Bouillon de bœuf'],[10,'g','Farine'],[10,'g','Beurre'],[80,'ml','Lait'],[0.5,'pièce','Oignon'],[10,'ml','Huile d’olive'],[1,'pincée','Muscade'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'8 min — Épluche les pommes de terre et les carottes. Coupe les pommes de terre en cubes et les carottes en rondelles épaisses. Émince l’oignon.',
+'18 min — Fais cuire les pommes de terre dans l’eau salée 15 à 18 min jusqu’à ce qu’elles soient tendres. Fais cuire les carottes à la vapeur ou à l’eau 10 à 12 min.',
+'7 min — Fais chauffer l’huile dans une poêle et dore les boulettes sur toutes les faces 6 à 7 min. Réserve-les.',
+'4 min — Dans la même poêle, fais revenir l’oignon 3 min. Ajoute le beurre puis la farine et mélange 1 min pour former un roux.',
+'5 min — Verse le bouillon progressivement en fouettant pour éviter les grumeaux. Laisse épaissir 3 à 4 min à feu doux ; la sauce doit être lisse et nappante.',
+'5 min — Remets les boulettes dans la sauce et laisse cuire encore 4 à 5 min jusqu’à cuisson complète.',
+'4 min — Chauffe le lait avec la muscade. Égoutte les pommes de terre, écrase-les et incorpore le lait progressivement jusqu’à obtenir une purée souple.',
+'2 min — Répartis purée, carottes et boulettes nappées de sauce brune.'
+]},
+49:{time:40,kcal:1120,protein:79,carbs:136,fat:31,cost:5.90,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; ajoute un peu d’eau ou de lait de coco au réchauffage.',ingredients:[
+[240,'g','Filet de porc'],[150,'g','Nouilles asiatiques sèches'],[150,'g','Poivron'],[20,'g','Beurre de cacahuète'],[25,'ml','Sauce soja'],[100,'ml','Lait de coco'],[10,'ml','Jus de citron vert'],[1,'gousse','Ail'],[5,'g','Gingembre frais'],[10,'ml','Huile neutre'],[5,'g','Miel'],[1,'pincée','Piment doux']
+],steps:[
+'5 min — Coupe le porc en fines lamelles et le poivron en lanières. Hache l’ail et râpe le gingembre.',
+'4 min — Dans un bol, fouette le beurre de cacahuète, la sauce soja, le lait de coco, le jus de citron vert et le miel. Détends avec 2 c. à s. d’eau chaude pour obtenir une sauce fluide.',
+'8 min — Fais cuire les nouilles selon les indications du paquet. Égoutte-les et réserve un peu d’eau de cuisson.',
+'6 min — Chauffe l’huile dans un wok très chaud. Saisis le porc 5 à 6 min en remuant jusqu’à ce qu’il soit bien doré et cuit à cœur. Réserve.',
+'5 min — Fais sauter le poivron 4 min puis ajoute l’ail et le gingembre 30 secondes.',
+'3 min — Baisse le feu, verse la sauce satay et remue 2 à 3 min jusqu’à ce qu’elle soit chaude et nappante. Ne la fais pas bouillir fortement.',
+'3 min — Remets le porc et les nouilles. Mélange en ajoutant une cuillère d’eau de cuisson si la sauce est trop épaisse.',
+'2 min — Goûte et ajuste le citron ou le piment avant de répartir.'
+]},
+50:{time:45,kcal:1010,protein:72,carbs:108,fat:30,cost:4.90,storage:'3 jours au réfrigérateur. Congélation possible 2 mois ; ajoute un peu de bouillon au réchauffage car les lentilles épaississent en refroidissant.',ingredients:[
+[200,'g','Bœuf haché 5 %'],[100,'g','Lentilles corail sèches'],[150,'g','Épinards frais'],[150,'ml','Lait de coco'],[100,'g','Tomates concassées'],[100,'ml','Bouillon de légumes'],[0.5,'pièce','Oignon'],[2,'gousse','Ail'],[10,'ml','Huile d’olive'],[5,'g','Curry doux'],[3,'g','Cumin moulu'],[5,'g','Gingembre frais'],[1,'pincée','Sel'],[1,'pincée','Poivre noir']
+],steps:[
+'5 min — Rince les lentilles corail dans une passoire fine jusqu’à ce que l’eau soit presque claire. Émince l’oignon, hache l’ail et râpe le gingembre.',
+'6 min — Fais chauffer l’huile dans une cocotte. Fais revenir l’oignon 3 à 4 min puis ajoute l’ail, le gingembre, le curry et le cumin 30 secondes.',
+'6 min — Ajoute le bœuf haché et fais-le dorer 5 à 6 min en l’émiettant. Il doit perdre sa couleur rouge avant d’ajouter les lentilles.',
+'2 min — Ajoute les tomates concassées et mélange 1 min pour les concentrer.',
+'18 min — Verse le bouillon, le lait de coco et les lentilles. Couvre partiellement et laisse mijoter 15 à 18 min à feu doux en remuant régulièrement. Ajoute un peu d’eau si le mélange devient trop épais.',
+'3 min — Incorpore les épinards en deux fois et laisse-les tomber 2 à 3 min.',
+'2 min — Goûte, ajuste sel et poivre. La texture finale doit être crémeuse mais pas sèche ; répartis en portions généreuses.'
+]}
+};
+function ingredientGroup(name){
+ const n=String(name).toLowerCase();
+ if(/poulet|dinde|bœuf|boeuf|porc|saumon|thon|jambon|saucisse|steak|boulettes/.test(n)) return 'Viandes & poissons';
+ if(/riz|semoule|nouilles|pâtes|penne|spaghetti|fusilli|tagliatelles|gnocchi|orzo|lasagne|pommes de terre|patate douce|lentilles|chapelure|farine/.test(n)) return 'Féculents';
+ if(/crème|lait|fromage|parmesan|emmental|mozzarella|beurre|yaourt/.test(n)) return 'Produits frais';
+ if(/carotte|courgette|aubergine|poivron|brocoli|épinard|tomate|oignon|ail|champignon|haricot|maïs|céleri|citron|échalote|coriandre|persil|basilic|menthe|aneth/.test(n)) return 'Fruits & légumes';
+ if(/sel|poivre|paprika|cumin|origan|muscade|thym|gingembre|curry|épice|piment/.test(n)) return 'Épices & condiments';
+ return 'Épicerie & sauces';
+}
+function money(n){return new Intl.NumberFormat('fr-BE',{style:'currency',currency:'EUR'}).format(n)}
+for(const r of recipes){
+ const d=DETAIL_RECIPES[Number(String(r.id).replace(/\D/g,''))];
+ if(!d) continue;
+ r.ingredients=d.ingredients.map(([qty,unit,name,group])=>({qty,unit,name,group:group||ingredientGroup(name)}));
+ r.steps=d.steps; r.time=d.time; r.kcal=d.kcal; r.protein=d.protein; r.carbs=d.carbs; r.fat=d.fat; r.cost=d.cost; r.storage=d.storage+' Refroidissement : répartis rapidement dans des boîtes peu profondes et place au réfrigérateur dans les 2 heures. Réchauffage : au micro-ondes 2 à 3 min à 750–800 W en remuant à mi-parcours, jusqu’à ce que le centre soit bien fumant (74 °C) ; ajoute 1 à 2 c. à s. d’eau ou de bouillon si le plat a épaissi. Pour garder les pommes de terre croustillantes, préfère le four ou l’air fryer à 180 °C pendant 5 à 8 min. Ne recongèle pas un plat déjà décongelé.'
+ r.servingLabel='1 repas généreux (équivalent à 2 portions normales)';
+ r.source=Number(String(r.id).replace(/\D/g,''))<=19?'Recette Basta transmise en captures, adaptée aux portions généreuses':'Recette originale Mon Batch, développée pour les portions généreuses';
+}
+
 const state={view:'home',search:'',filter:'Toutes',showFav:false,batch:[],checked:{},cookDone:{},activeRecipe:null,cookIndex:0,showModal:null};
-const KEY='monBatch_v1';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){};Object.assign(state,saved);state.batch=(state.batch||[]).map(b=>{let people=Math.max(1,Number(b.people)||2),days=Math.max(1,Number(b.days)||2);return {...b,people,days,portions:people*days}});
+const KEY='monBatch_v1';let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){};Object.assign(state,saved);state.batch=(state.batch||[]).map(b=>{let people=Math.max(1,Number(b.people)||2),days=Math.max(1,Number(b.days)||1);return {...b,people,days,portions:people*days}});
 function persist(){const x={batch:state.batch,checked:state.checked,cookDone:state.cookDone,favorites:state.favorites||[],custom:state.custom||[]};localStorage.setItem(KEY,JSON.stringify(x))}
 function allRecipes(){return recipes.concat(state.custom||[])}function recipeEmoji(r){return r.emoji||({'Poisson':'🐟','Bœuf':'🥩','Poulet':'🍗','Volaille':'🍗','Porc':'🥢','Végétarien':'🥦','Asiatique':'🍜'}[r.category]||'🍽️')}function recipeVisual(r,detail=false){if(r.photo)return `<img src="${r.photo}" alt="${esc(r.title)}" loading="lazy">`;return `<span class="${detail?'detailheroemoji':'bigemoji'}" role="img" aria-label="${esc(r.title)}">${recipeEmoji(r)}</span>`}function fav(r){return (state.favorites||[]).includes(r.id)}function fmt(n){return Math.round(n*10)/10}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function nav(view){state.view=view;state.search='';render()}function toggleFav(id){state.favorites=state.favorites||[];state.favorites=fav(allRecipes().find(r=>r.id===id))?state.favorites.filter(x=>x!==id):[...state.favorites,id];persist();render()}
-function addBatch(id){let x=state.batch.find(b=>b.id===id);if(x){toast('Cette recette est déjà dans ton batch : règle les personnes et les jours directement.');return;}state.batch.push({id,people:2,days:2,portions:4});persist();toast('Recette ajoutée : 2 personnes pendant 2 jours.');}
+function addBatch(id){let x=state.batch.find(b=>b.id===id);if(x){toast('Cette recette est déjà dans ton batch : règle les personnes et les jours directement.');return;}state.batch.push({id,people:2,days:1,portions:2});persist();toast('Recette ajoutée : 2 personnes pour 1 dîner.');}
 function removeBatch(id){state.batch=state.batch.filter(x=>x.id!==id);persist();render()}
-function adjustBatch(id,key,d){let x=state.batch.find(b=>b.id===id);if(!x)return;x.people=x.people||2;x.days=x.days||2;x[key]=Math.max(1,Math.min(key==='people'?8:14,x[key]+d));x.portions=x.people*x.days;persist();render()}
-function recipeCard(r){return `<article class="recipe"><div class="foodpic" style="background:${palette(r.id)}">${recipeVisual(r)}<button class="favorite" aria-label="Favori" onclick="event.stopPropagation();toggleFav('${r.id}')">${fav(r)?'♥':'♡'}</button></div><div class="recipebody"><h3>${esc(r.title)}</h3><div class="tags"><span class="tag">${esc(r.category)}</span><span class="tag gold">⏱ ${r.time} min</span></div><div class="macros"><div class="macro"><b>${r.kcal}</b><small>kcal</small></div><div class="macro"><b>${r.protein}g</b><small>prot.</small></div><div class="macro"><b>${r.carbs}g</b><small>gluc.</small></div><div class="macro"><b>${r.fat}g</b><small>lip.</small></div></div><div class="recipefoot"><button class="btn secondary small" onclick="detail('${r.id}')">Voir recette</button><button class="btn small" onclick="addBatch('${r.id}');nav('batch')">+ Batch</button></div></div></article>`}
+function adjustBatch(id,key,d){let x=state.batch.find(b=>b.id===id);if(!x)return;x.people=x.people||2;x.days=x.days||1;x[key]=Math.max(1,Math.min(key==='people'?8:14,x[key]+d));x.portions=x.people*x.days;persist();render()}
+function recipeCard(r){return `<article class="recipe"><div class="foodpic" style="background:${palette(r.id)}">${recipeVisual(r)}<button class="favorite" aria-label="Favori" onclick="event.stopPropagation();toggleFav('${r.id}')">${fav(r)?'♥':'♡'}</button></div><div class="recipebody"><h3>${esc(r.title)}</h3><div class="tags"><span class="tag">${esc(r.category)}</span><span class="tag gold">⏱ ${r.time} min</span></div><div class="macros"><div class="macro"><b>${r.kcal}</b><small>kcal</small></div><div class="macro"><b>${r.protein}g</b><small>prot.</small></div><div class="macro"><b>${r.carbs}g</b><small>gluc.</small></div><div class="macro"><b>${r.fat}g</b><small>lip.</small></div></div><div class="tiny" style="margin-top:8px">≈ ${Number.isFinite(Number(r.cost))?money(r.cost):'Prix à estimer'} / repas généreux</div><div class="recipefoot"><button class="btn secondary small" onclick="detail('${r.id}')">Voir recette</button><button class="btn small" onclick="addBatch('${r.id}');nav('batch')">+ Batch</button></div></div></article>`}
 function palette(id){let n=(parseInt(String(id).replace(/\D/g,''))||1)%6;return ['linear-gradient(135deg,#fff0d9,#f4d3c5)','linear-gradient(135deg,#e7f0d7,#d9e8cf)','linear-gradient(135deg,#f9e7d5,#e8d1bd)','linear-gradient(135deg,#eee7ff,#dad1ff)','linear-gradient(135deg,#fce8eb,#f7d4d9)','linear-gradient(135deg,#e5eff5,#cddfea)'][n]}
 function modal(html){document.body.insertAdjacentHTML('beforeend',`<div class="modalback" id="modalback" onclick="if(event.target.id==='modalback')closeModal()"><div class="modal">${html}</div></div>`)}function closeModal(){document.getElementById('modalback')?.remove()}
-function detail(id){let r=allRecipes().find(x=>x.id===id);if(!r)return;state.activeRecipe=id;modal(`<div class="modalhead"><h2>${esc(r.title)}</h2><button class="close" onclick="closeModal()">×</button></div><div class="detailhero" style="background:${palette(r.id)}">${recipeVisual(r,true)}</div><div class="tags"><span class="tag">${esc(r.category)}</span><span class="tag gold">⏱ ${r.time} min</span><span class="tag">4 portions généreuses</span></div><div class="detailgrid" style="margin:16px 0"><div class="detailmacro"><b>${r.kcal}</b><span>kcal / grande portion</span></div><div class="detailmacro"><b>${r.protein} g</b><span>Protéines</span></div><div class="detailmacro"><b>${r.carbs} g</b><span>Glucides</span></div><div class="detailmacro"><b>${r.fat} g</b><span>Lipides</span></div></div><div class="sectionhead"><h2>Ingrédients</h2><span class="muted">pour 4 portions généreuses</span></div><div class="ingredientslist">${r.ingredients.map(x=>`<div class="ingredientline"><span>${esc(x.name)}</span><b>${fmt(x.qty)} ${esc(x.unit)}</b></div>`).join('')}</div><div class="sectionhead"><h2>Préparation</h2></div><ol class="steps">${r.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><p class="tiny">Conservation : ${esc(r.storage)}<br>Valeurs nutritionnelles estimées par grande portion, à ajuster selon les marques et produits utilisés.</p><div class="inlineactions"><button class="btn" onclick="addBatch('${r.id}');closeModal();nav('batch')">Ajouter au batch</button><button class="btn secondary" onclick="toggleFav('${r.id}');closeModal();detail('${r.id}')">${fav(r)?'Retirer des favoris':'Ajouter aux favoris'}</button></div>`)}
+function detail(id){let r=allRecipes().find(x=>x.id===id);if(!r)return;state.activeRecipe=id;let own=String(r.id).startsWith('custom_');let serving=own?'4 portions (fiche personnelle)':'1 repas généreux pour 1 personne (2 portions normales)';let price=Number.isFinite(Number(r.cost))?`<div class="panel" style="margin:12px 0;padding:14px"><div class="sectionhead" style="margin:0"><div><b>Coût estimé</b><div class="tiny">Pour un repas généreux individuel · prix indicatif Belgique</div></div><strong style="font-size:22px;color:var(--navy)">${money(r.cost)}</strong></div><div class="tiny" style="margin-top:6px">Soit environ ${money(r.cost*2)} pour deux personnes sur un dîner. Estimation non contractuelle : marques, magasins et promotions peuvent faire varier le montant.</div></div>`:'';modal(`<div class="modalhead"><h2>${esc(r.title)}</h2><button class="close" onclick="closeModal()">×</button></div><div class="detailhero" style="background:${palette(r.id)}">${recipeVisual(r,true)}</div><div class="tags"><span class="tag">${esc(r.category)}</span><span class="tag gold">⏱ ${r.time} min</span><span class="tag">${esc(serving)}</span></div><div class="detailgrid" style="margin:16px 0"><div class="detailmacro"><b>${r.kcal}</b><span>kcal / grand repas</span></div><div class="detailmacro"><b>${r.protein} g</b><span>Protéines</span></div><div class="detailmacro"><b>${r.carbs} g</b><span>Glucides</span></div><div class="detailmacro"><b>${r.fat} g</b><span>Lipides</span></div></div>${price}<div class="sectionhead"><h2>Ingrédients</h2><span class="muted">${esc(serving)}</span></div><div class="ingredientslist">${r.ingredients.map(x=>`<div class="ingredientline"><span>${esc(x.name)}</span><b>${fmt(x.qty)} ${esc(x.unit)}</b></div>`).join('')}</div><div class="sectionhead"><h2>Préparation détaillée</h2><span class="muted">Temps indiqués à chaque étape</span></div><ol class="steps">${r.steps.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><div class="panel" style="margin:14px 0;padding:14px"><b>Conservation</b><p class="tiny" style="margin:7px 0 0">${esc(r.storage||'À conserver dans une boîte hermétique au réfrigérateur et à consommer sous 3 jours.')}</p></div><p class="tiny">Valeurs nutritionnelles estimées pour le repas généreux indiqué. Elles varient selon les marques, les morceaux choisis et les quantités réellement utilisées. ${esc(r.source||'Recette personnelle')}.</p><div class="inlineactions"><button class="btn" onclick="addBatch('${r.id}');closeModal();nav('batch')">Ajouter au batch</button><button class="btn secondary" onclick="toggleFav('${r.id}');closeModal();detail('${r.id}')">${fav(r)?'Retirer des favoris':'Ajouter aux favoris'}</button></div>`)}
 function home(){let total=state.batch.length;return `<div class="hero"><div><h1>Ton batch cooking,<br>en toute simplicité.</h1><p>Des plats chauds, gourmands et protéinés. Tu choisis, on calcule les quantités et les courses.</p><button class="btn light" onclick="nav('recipes')">Explorer les recettes　→</button></div><div class="herofood">🥘</div></div><div class="stats"><div class="stat"><strong>${allRecipes().length}</strong><span>recettes disponibles</span></div><div class="stat"><strong>${total}</strong><span>recettes dans ton batch</span></div><div class="stat"><strong>${(state.favorites||[]).length}</strong><span>favoris</span></div></div><div class="sectionhead"><h2>Ton espace cuisine</h2></div><div class="quickgrid"><button class="quick" onclick="nav('recipes')"><span class="emoji">📚</span><strong>Découvrir les recettes</strong><small>Parcourir le catalogue et tes favoris</small></button><button class="quick" onclick="nav('batch')"><span class="emoji">🛒</span><strong>Préparer mon batch cooking</strong><small>${total?total+' recette(s) sélectionnée(s)':'Sélectionner tes plats et générer les courses'}</small></button><button class="quick" onclick="openAdd()"><span class="emoji">✍️</span><strong>Ajouter une recette</strong><small>Importer tes idées ou celles de ta famille</small></button></div><div class="sectionhead"><h2>Quelques idées pour toi</h2><button class="btn secondary small" onclick="nav('recipes')">Tout voir</button></div><div class="grid">${[recipes[0],recipes[2],recipes[16]].map(recipeCard).join('')}</div>`}
 function normalizeSearch(value){return String(value??'').toLocaleLowerCase('fr').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[’']/g,' ').replace(/[^a-z0-9]+/g,' ').trim()}
 function recipeMatchesSearch(r,query){let q=normalizeSearch(query);if(!q)return true;let ignored=new Set(['et','de','du','des','la','le','les','un','une','avec','au','aux','a','d','en','pour','sur','dans','sans','ou']);let terms=q.split(/\s+/).filter(w=>w.length>1&&!ignored.has(w));if(!terms.length)return true;let searchable=normalizeSearch([r.title,r.category,...(r.ingredients||[]).map(x=>x.name),...(r.steps||[])].join(' '));return terms.every(term=>searchable.includes(term))}
-function recipesPage(){let list=allRecipes().filter(r=>(!state.showFav||fav(r))&&(state.filter==='Toutes'||r.category===state.filter)&&recipeMatchesSearch(r,state.search));return `<div class="sectionhead"><div><h2>${state.showFav?'Mes favoris':'Toutes les recettes'}</h2><div class="tiny">${list.length} recette(s) · recherche par plat, ingrédient ou préparation</div></div><button class="btn small" onclick="openAdd()">＋ Ajouter</button></div><div class="recipe-search-panel"><label class="recipe-search-label" for="recipeSearchInput">Rechercher dans les plats</label><div class="recipe-search-row"><input id="recipeSearchInput" class="search recipe-search" type="search" autocomplete="off" aria-label="Rechercher une recette ou un ingrédient" placeholder="Ex. poulet miso, brocoli, riz…" value="${esc(state.search)}" oninput="state.search=this.value;refreshRecipes()">${state.search?`<button class="recipe-search-clear" type="button" aria-label="Effacer la recherche" onclick="state.search='';refreshRecipes()">Effacer</button>`:''}</div><small class="recipe-search-help">La recherche regarde aussi les ingrédients : essaie « miso », « brocoli » ou « riz ».</small></div><div class="toolbar"><button class="btn ${state.showFav?'':'secondary'} small" onclick="state.showFav=!state.showFav;render()">♥ ${state.showFav?'Voir toutes':'Favoris'}</button><button class="btn outline small" onclick="state.filter='Toutes';state.search='';state.showFav=false;render()">Tout afficher</button></div><div class="tabs" style="margin:13px 0">${categories.map(c=>`<button class="tab ${state.filter===c?'active':''}" onclick="state.filter='${c}';render()">${c}</button>`).join('')}</div>${list.length?`<div class="grid">${list.map(recipeCard).join('')}</div>`:`<div class="empty">Aucune recette trouvée pour « ${esc(state.search)} ».<br><button class="btn secondary small" style="margin-top:12px" onclick="state.filter='Toutes';state.showFav=false;state.search='';render()">Effacer les filtres</button></div>`}<p class="footnote">Les recettes de départ sont des versions adaptées créées pour cette application. Elles ne reproduisent pas nécessairement les fiches originales de Basta. Tu peux les modifier ou ajouter tes propres recettes.</p>`}
+function recipesPage(){let list=allRecipes().filter(r=>(!state.showFav||fav(r))&&(state.filter==='Toutes'||r.category===state.filter)&&recipeMatchesSearch(r,state.search));return `<div class="sectionhead"><div><h2>${state.showFav?'Mes favoris':'Toutes les recettes'}</h2><div class="tiny">${list.length} recette(s) · recherche par plat, ingrédient ou préparation</div></div><button class="btn small" onclick="openAdd()">＋ Ajouter</button></div><div class="recipe-search-panel"><label class="recipe-search-label" for="recipeSearchInput">Rechercher dans les plats</label><div class="recipe-search-row"><input id="recipeSearchInput" class="search recipe-search" type="search" autocomplete="off" aria-label="Rechercher une recette ou un ingrédient" placeholder="Ex. poulet miso, brocoli, riz…" value="${esc(state.search)}" oninput="state.search=this.value;refreshRecipes()">${state.search?`<button class="recipe-search-clear" type="button" aria-label="Effacer la recherche" onclick="state.search='';refreshRecipes()">Effacer</button>`:''}</div><small class="recipe-search-help">La recherche regarde aussi les ingrédients : essaie « miso », « brocoli » ou « riz ».</small></div><div class="toolbar"><button class="btn ${state.showFav?'':'secondary'} small" onclick="state.showFav=!state.showFav;render()">♥ ${state.showFav?'Voir toutes':'Favoris'}</button><button class="btn outline small" onclick="state.filter='Toutes';state.search='';state.showFav=false;render()">Tout afficher</button></div><div class="tabs" style="margin:13px 0">${categories.map(c=>`<button class="tab ${state.filter===c?'active':''}" onclick="state.filter='${c}';render()">${c}</button>`).join('')}</div>${list.length?`<div class="grid">${list.map(recipeCard).join('')}</div>`:`<div class="empty">Aucune recette trouvée pour « ${esc(state.search)} ».<br><button class="btn secondary small" style="margin-top:12px" onclick="state.filter='Toutes';state.showFav=false;state.search='';render()">Effacer les filtres</button></div>`}<p class="footnote">Les 19 premières recettes sont adaptées des captures que tu as fournies ; les autres ont été développées pour Mon Batch. Les quantités correspondent à un repas généreux par personne. Tu peux ajouter tes propres recettes.</p>`}
 function refreshRecipes(){let field=document.getElementById('recipeSearchInput');let pos=window.scrollY;let cursor=field?field.selectionStart:null;render();let next=document.getElementById('recipeSearchInput');if(next){next.focus();if(cursor!==null&&next.type!=='search')next.setSelectionRange(cursor,cursor);else if(cursor!==null){try{next.setSelectionRange(cursor,cursor)}catch(e){}}}window.scrollTo(0,pos)}
-function batchIngredients(){let map=new Map();for(let b of state.batch){let r=allRecipes().find(x=>x.id===b.id);if(!r)continue;let factor=((b.people||2)*(b.days||2))/4;for(let x of r.ingredients){let key=x.name.toLowerCase()+'|'+x.unit;let z=map.get(key)||{...x,qty:0,ids:[]};z.qty+=x.qty*factor;z.ids.push(r.title);map.set(key,z)}}return [...map.values()].sort((a,b)=>a.group.localeCompare(b.group,'fr')||a.name.localeCompare(b.name,'fr'))}
-function batchPage(){if(!state.batch.length)return `<div class="sectionhead"><h2>Mon batch cooking</h2></div><div class="empty"><div style="font-size:48px">🍱</div><h3>Ton batch cooking est vide</h3><p>Choisis les recettes que tu souhaites préparer pour les prochains soirs.</p><button class="btn" onclick="nav('recipes')">Choisir mes recettes</button></div>`;let list=batchIngredients();let groups=[...new Set(list.map(x=>x.group))];return `<div class="sectionhead"><div><h2>Mon batch cooking</h2><div class="tiny">${state.batch.length} recette(s) sélectionnée(s) · réglages personnalisables pour chaque plat</div></div><button class="btn secondary small" onclick="nav('recipes')">＋ Ajouter un plat</button></div><div class="panel"><h3 style="margin:0 0 6px">Mes recettes sélectionnées</h3><p class="tiny" style="margin:0 0 10px">Choisis combien de personnes vont manger ce plat et pendant combien de jours.</p>${state.batch.map(b=>{let r=allRecipes().find(x=>x.id===b.id);let people=b.people||2,days=b.days||2;return r?`<div class="batchrow"><div class="batchtitle"><b>${esc(r.title)}</b><div class="tiny">${r.kcal} kcal · ${r.protein} g protéines par grande portion</div><div class="batchsummary">Pour <strong>${people}</strong> personne(s) pendant <strong>${days}</strong> jour(s)</div></div><div class="batchcontrols"><div class="batchcontrol"><span>Nombre de personnes</span><div class="qty"><button aria-label="Diminuer le nombre de personnes" onclick="adjustBatch('${r.id}','people',-1)">−</button><b>${people}</b><button aria-label="Augmenter le nombre de personnes" onclick="adjustBatch('${r.id}','people',1)">＋</button></div></div><div class="batchcontrol"><span>Nombre de jours</span><div class="qty"><button aria-label="Diminuer le nombre de jours" onclick="adjustBatch('${r.id}','days',-1)">−</button><b>${days}</b><button aria-label="Augmenter le nombre de jours" onclick="adjustBatch('${r.id}','days',1)">＋</button></div></div></div><button class="iconbtn remove" onclick="removeBatch('${r.id}')">Retirer</button></div>`:''}).join('')}<div class="footnote">Réglage initial : 2 personnes pendant 2 jours. Tu peux modifier séparément ces deux nombres pour chaque recette. Les ingrédients et la liste de courses sont recalculés automatiquement.</div></div><div class="sectionhead"><div><h2>Liste de courses</h2><div class="tiny">${list.length} ingrédients regroupés automatiquement</div></div><button class="btn secondary small" onclick="copyShopping()">Copier</button></div><div class="panel"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>Ma liste de courses</b><span class="tiny">${Object.values(state.checked).filter(Boolean).length}/${list.length} cochés</span></div><div class="progress"><span style="width:${list.length?100*list.filter(x=>state.checked[ingKey(x)]).length/list.length:0}%"></span></div>${groups.map(g=>`<div class="ingredientgroup"><h3>${esc(g)}</h3>${list.filter(x=>x.group===g).map(x=>{let k=ingKey(x),ck=!!state.checked[k];return `<div class="ingredient ${ck?'checked':''}"><input type="checkbox" ${ck?'checked':''} onchange="checkIngredient('${encodeURIComponent(k)}',this.checked)"><label>${esc(x.name)}</label><strong>${fmt(x.qty)} ${esc(x.unit)}</strong></div>`}).join('')}</div>`).join('')}</div><div class="inlineactions" style="margin-top:16px"><button class="btn" onclick="startCooking()">Passer en mode cuisine →</button><button class="btn outline" onclick="resetChecks()">Réinitialiser les courses</button></div>`}
-function ingKey(x){return x.name.toLowerCase()+'|'+x.unit}function checkIngredient(k,v){state.checked[decodeURIComponent(k)]=v;persist();render()}function resetChecks(){state.checked={};persist();render()}function copyShopping(){let txt='LISTE DE COURSES — MON BATCH\n'+batchIngredients().map(x=>x.group+'\n'+fmt(x.qty)+' '+x.unit+' — '+x.name).join('\n');if(navigator.clipboard?.writeText)navigator.clipboard.writeText(txt).then(()=>toast('Liste copiée')).catch(()=>toast('Copie non disponible'));else toast('Copie non disponible dans ce navigateur')}
+function batchIngredients(){let map=new Map();for(let b of state.batch){let r=allRecipes().find(x=>x.id===b.id);if(!r)continue;let factor=String(r.id).startsWith('custom_')?((b.people||2)*(b.days||1))/4:((b.people||2)*(b.days||1));for(let x of r.ingredients){let key=x.name.toLowerCase()+'|'+x.unit;let z=map.get(key)||{...x,qty:0,ids:[]};z.qty+=x.qty*factor;z.ids.push(r.title);map.set(key,z)}}return [...map.values()].sort((a,b)=>a.group.localeCompare(b.group,'fr')||a.name.localeCompare(b.name,'fr'))}
+function batchEstimatedCost(){return state.batch.reduce((sum,b)=>{let r=allRecipes().find(x=>x.id===b.id);if(!r||!Number.isFinite(Number(r.cost)))return sum;let multiplier=String(r.id).startsWith('custom_')?((b.people||2)*(b.days||1))/4:((b.people||2)*(b.days||1));return sum+Number(r.cost)*multiplier},0)}
+function batchPage(){if(!state.batch.length)return `<div class="sectionhead"><h2>Mon batch cooking</h2></div><div class="empty"><div style="font-size:48px">🍱</div><h3>Ton batch cooking est vide</h3><p>Choisis les recettes que tu souhaites préparer pour les prochains soirs.</p><button class="btn" onclick="nav('recipes')">Choisir mes recettes</button></div>`;let list=batchIngredients();let groups=[...new Set(list.map(x=>x.group))];return `<div class="sectionhead"><div><h2>Mon batch cooking</h2><div class="tiny">${state.batch.length} recette(s) sélectionnée(s) · réglages personnalisables pour chaque plat</div></div><button class="btn secondary small" onclick="nav('recipes')">＋ Ajouter un plat</button></div><div class="panel"><h3 style="margin:0 0 6px">Mes recettes sélectionnées</h3><p class="tiny" style="margin:0 0 10px">Choisis combien de personnes vont manger ce plat et pendant combien de jours.</p>${state.batch.map(b=>{let r=allRecipes().find(x=>x.id===b.id);let people=b.people||2,days=b.days||1;return r?`<div class="batchrow"><div class="batchtitle"><b>${esc(r.title)}</b><div class="tiny">${r.kcal} kcal · ${r.protein} g protéines par grande portion</div><div class="batchsummary">Pour <strong>${people}</strong> personne(s) pendant <strong>${days}</strong> jour(s) · ${people*days} repas généreux</div><div class="tiny">Budget estimé pour cette recette : <b>${Number.isFinite(Number(r.cost))?money(r.cost*people*days):'non disponible'}</b></div></div><div class="batchcontrols"><div class="batchcontrol"><span>Nombre de personnes</span><div class="qty"><button aria-label="Diminuer le nombre de personnes" onclick="adjustBatch('${r.id}','people',-1)">−</button><b>${people}</b><button aria-label="Augmenter le nombre de personnes" onclick="adjustBatch('${r.id}','people',1)">＋</button></div></div><div class="batchcontrol"><span>Nombre de jours</span><div class="qty"><button aria-label="Diminuer le nombre de jours" onclick="adjustBatch('${r.id}','days',-1)">−</button><b>${days}</b><button aria-label="Augmenter le nombre de jours" onclick="adjustBatch('${r.id}','days',1)">＋</button></div></div></div><button class="iconbtn remove" onclick="removeBatch('${r.id}')">Retirer</button></div>`:''}).join('')}<div class="footnote">Réglage initial : 2 personnes pour 1 dîner. Tu peux modifier séparément le nombre de personnes et de jours pour chaque recette. Une portion affichée correspond à deux portions normales. Les ingrédients et la liste de courses sont recalculés automatiquement.</div></div><div class="sectionhead"><div><h2>Liste de courses</h2><div class="tiny">${list.length} ingrédients regroupés automatiquement</div></div><button class="btn secondary small" onclick="copyShopping()">Copier</button></div><div class="panel" style="margin-bottom:12px;padding:14px"><div class="tiny">Budget estimé pour l’ensemble du batch</div><strong style="font-size:24px;color:var(--navy)">${money(batchEstimatedCost())}</strong><div class="tiny">Calcul basé sur le coût estimé par grand repas et le nombre de personnes × jours. Prix indicatifs, non liés à un magasin précis.</div></div><div class="panel"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>Ma liste de courses</b><span class="tiny">${Object.values(state.checked).filter(Boolean).length}/${list.length} cochés</span></div><div class="progress"><span style="width:${list.length?100*list.filter(x=>state.checked[ingKey(x)]).length/list.length:0}%"></span></div>${groups.map(g=>`<div class="ingredientgroup"><h3>${esc(g)}</h3>${list.filter(x=>x.group===g).map(x=>{let k=ingKey(x),ck=!!state.checked[k];return `<div class="ingredient ${ck?'checked':''}"><input type="checkbox" ${ck?'checked':''} onchange="checkIngredient('${encodeURIComponent(k)}',this.checked)"><label>${esc(x.name)}</label><strong>${fmt(x.qty)} ${esc(x.unit)}</strong></div>`}).join('')}</div>`).join('')}</div><div class="inlineactions" style="margin-top:16px"><button class="btn" onclick="startCooking()">Passer en mode cuisine →</button><button class="btn outline" onclick="resetChecks()">Réinitialiser les courses</button></div>`}
+function ingKey(x){return x.name.toLowerCase()+'|'+x.unit}function checkIngredient(k,v){state.checked[decodeURIComponent(k)]=v;persist();render()}function resetChecks(){state.checked={};persist();render()}function copyShopping(){let txt='LISTE DE COURSES — MON BATCH\nBudget indicatif : '+money(batchEstimatedCost())+'\n\n'+batchIngredients().map(x=>x.group+'\n'+fmt(x.qty)+' '+x.unit+' — '+x.name).join('\n');if(navigator.clipboard?.writeText)navigator.clipboard.writeText(txt).then(()=>toast('Liste copiée')).catch(()=>toast('Copie non disponible'));else toast('Copie non disponible dans ce navigateur')}
 function startCooking(){state.view='cooking';state.cookIndex=0;state.cookDone=state.cookDone||{};render()}
-function cookingPage(){if(!state.batch.length)return `<div class="empty"><h3>Aucun batch à préparer</h3><button class="btn" onclick="nav('recipes')">Choisir des recettes</button></div>`;let tasks=[];for(let b of state.batch){let r=allRecipes().find(x=>x.id===b.id);if(r)r.steps.forEach((s,i)=>tasks.push({id:r.id+'_'+i,recipe:r,step:s,index:i}))}let done=tasks.filter(x=>state.cookDone[x.id]).length;let current=tasks[state.cookIndex]||tasks.find(x=>!state.cookDone[x.id])||tasks[tasks.length-1];if(!current)return '';return `<div class="cookbanner"><div class="tiny" style="color:#ddd5ff">MODE CUISINE</div><h2>On passe aux fourneaux 👨‍🍳</h2><p style="margin:0;color:#e4deff">${done} étape(s) terminée(s) sur ${tasks.length}</p><div class="progress" style="background:#ffffff45;margin-top:12px"><span style="width:${100*done/tasks.length}%;background:#ffe7a0"></span></div></div><div class="sectionhead"><h2>${esc(current.recipe.title)}</h2><span class="tag gold">Étape ${current.index+1}/ ${current.recipe.steps.length}</span></div><div class="panel"><div class="cookmeta">${esc(current.recipe.category)} · ${current.recipe.time} min au total</div><label class="cookstep ${state.cookDone[current.id]?'done':''}"><input type="checkbox" ${state.cookDone[current.id]?'checked':''} onchange="toggleCook('${current.id}',this.checked)"><span class="cooktext">${esc(current.step)}</span></label><div class="timer"><span>⏱ Minuteur</span><input id="timerMinutes" type="number" min="1" max="180" value="5" aria-label="Durée en minutes"><button onclick="startTimer()">Démarrer</button><b id="timerDisplay"></b></div><div class="inlineactions" style="margin-top:15px"><button class="btn secondary" onclick="prevCook()">← Précédente</button><button class="btn" onclick="nextCook()">${state.cookIndex===tasks.length-1?'Terminer':'Étape suivante →'}</button></div></div><div class="sectionhead"><h2>Toutes les étapes</h2><span class="tiny">Coche au fur et à mesure</span></div><div class="panel">${tasks.map((t,i)=>`<label class="cookstep ${state.cookDone[t.id]?'done':''}" onclick="state.cookIndex=${i};render()"><input type="checkbox" ${state.cookDone[t.id]?'checked':''} onclick="event.stopPropagation()" onchange="toggleCook('${t.id}',this.checked)"><span><div class="cookmeta">${esc(t.recipe.title)} · Étape ${t.index+1}</div><span class="cooktext">${esc(t.step)}</span></span></label>`).join('')}</div><div class="inlineactions" style="margin-top:16px"><button class="btn outline" onclick="finishCooking()">Terminer ma session</button></div>`}
+function cookingPage(){if(!state.batch.length)return `<div class="empty"><h3>Aucun batch à préparer</h3><button class="btn" onclick="nav('recipes')">Choisir des recettes</button></div>`;let tasks=[];for(let b of state.batch){let r=allRecipes().find(x=>x.id===b.id);if(r)r.steps.forEach((s,i)=>tasks.push({id:r.id+'_'+i,recipe:r,step:s,index:i}))}let done=tasks.filter(x=>state.cookDone[x.id]).length;let current=tasks[state.cookIndex]||tasks.find(x=>!state.cookDone[x.id])||tasks[tasks.length-1];if(!current)return '';return `<div class="cookbanner"><div class="tiny" style="color:#ddd5ff">MODE CUISINE</div><h2>On passe aux fourneaux 👨‍🍳</h2><p style="margin:0;color:#e4deff">${done} étape(s) terminée(s) sur ${tasks.length}</p><div class="progress" style="background:#ffffff45;margin-top:12px"><span style="width:${100*done/tasks.length}%;background:#ffe7a0"></span></div></div><div class="sectionhead"><h2>${esc(current.recipe.title)}</h2><span class="tag gold">Étape ${current.index+1}/ ${current.recipe.steps.length}</span></div><div class="panel"><div class="cookmeta">${esc(current.recipe.category)} · ${current.recipe.time} min au total</div><label class="cookstep ${state.cookDone[current.id]?'done':''}"><input type="checkbox" ${state.cookDone[current.id]?'checked':''} onchange="toggleCook('${current.id}',this.checked)"><span class="cooktext">${esc(current.step)}</span></label><div class="timer"><span>⏱ Minuteur</span><input id="timerMinutes" type="number" min="1" max="180" value="${(String(current.step).match(/^(\d+)\s*min/i)||[])[1]||5}" aria-label="Durée en minutes"><button onclick="startTimer()">Démarrer</button><b id="timerDisplay"></b></div><div class="inlineactions" style="margin-top:15px"><button class="btn secondary" onclick="prevCook()">← Précédente</button><button class="btn" onclick="nextCook()">${state.cookIndex===tasks.length-1?'Terminer':'Étape suivante →'}</button></div></div><div class="sectionhead"><h2>Toutes les étapes</h2><span class="tiny">Coche au fur et à mesure</span></div><div class="panel">${tasks.map((t,i)=>`<label class="cookstep ${state.cookDone[t.id]?'done':''}" onclick="state.cookIndex=${i};render()"><input type="checkbox" ${state.cookDone[t.id]?'checked':''} onclick="event.stopPropagation()" onchange="toggleCook('${t.id}',this.checked)"><span><div class="cookmeta">${esc(t.recipe.title)} · Étape ${t.index+1}</div><span class="cooktext">${esc(t.step)}</span></span></label>`).join('')}</div><div class="inlineactions" style="margin-top:16px"><button class="btn outline" onclick="finishCooking()">Terminer ma session</button></div>`}
 function toggleCook(id,v){state.cookDone[id]=v;persist();render()}function taskCount(){return state.batch.reduce((a,b)=>{let r=allRecipes().find(x=>x.id===b.id);return a+(r?r.steps.length:0)},0)}function prevCook(){state.cookIndex=Math.max(0,state.cookIndex-1);render()}function nextCook(){let n=taskCount();if(state.cookIndex>=n-1){finishCooking();return}state.cookIndex++;render()}function finishCooking(){if(confirm('Terminer cette session et vider le batch cooking ?')){state.batch=[];state.checked={};state.cookDone={};state.cookIndex=0;persist();nav('home');toast('Session terminée. Bon appétit !')}}
 let timerHandle=null,timerRemaining=0;function startTimer(){let n=Number(document.getElementById('timerMinutes')?.value)||5;timerRemaining=Math.max(60,Math.min(10800,n*60));clearInterval(timerHandle);const out=document.getElementById('timerDisplay');const tick=()=>{let m=Math.floor(timerRemaining/60),sec=timerRemaining%60;if(out)out.textContent=String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');if(timerRemaining<=0){clearInterval(timerHandle);timerHandle=null;toast('Minuteur terminé !');}timerRemaining--;};tick();timerHandle=setInterval(tick,1000)}
 function openAdd(){modal(`<div class="modalhead"><h2>Ajouter une recette</h2><button class="close" onclick="closeModal()">×</button></div><p class="muted">Ajoute une recette de famille ou une création personnelle. Les données seront sauvegardées sur cet appareil.</p><form onsubmit="saveRecipe(event)"><div class="field"><label>Nom de la recette *</label><input id="newtitle" required placeholder="Ex. Poulet crémeux aux champignons"></div><div class="formgrid"><div class="field"><label>Catégorie</label><select id="newcat"><option>Poulet</option><option>Volaille</option><option>Bœuf</option><option>Porc</option><option>Poisson</option><option>Végétarien</option><option>Asiatique</option></select></div><div class="field"><label>Photo (facultative)</label><input id="newphoto" type="file" accept="image/*"></div><div class="field"><label>Temps total (minutes)</label><input id="newtime" type="number" min="5" value="35"></div><div class="field"><label>Calories / grande portion</label><input id="newkcal" type="number" min="0" value="650"></div><div class="field"><label>Protéines (g)</label><input id="newprotein" type="number" min="0" value="40"></div><div class="field"><label>Glucides (g)</label><input id="newcarbs" type="number" min="0" value="70"></div><div class="field"><label>Lipides (g)</label><input id="newfat" type="number" min="0" value="20"></div></div><div class="field"><label>Ingrédients pour 4 portions généreuses * (un par ligne : quantité | unité | ingrédient | catégorie)</label><textarea id="newingredients" required placeholder="600 | g | Blanc de poulet | Viandes & poissons\n300 | g | Riz | Féculents\n200 | ml | Crème légère | Produits frais\n15 | ml | Huile d’olive | Épicerie & sauces"></textarea><div class="tiny">Catégories possibles : Viandes & poissons, Féculents, Fruits & légumes, Produits frais, Épicerie & sauces, Épices & condiments.</div></div><div class="field"><label>Étapes (une par ligne) *</label><textarea id="newsteps" required placeholder="Prépare et coupe les ingrédients.\nFais cuire le riz.\nFais dorer le poulet dans une poêle.\nAjoute la sauce et les légumes puis laisse mijoter.\nRépartis dans 4 portions et laisse refroidir."></textarea></div><div class="field"><label>Conservation</label><input id="newstorage" value="3 jours au réfrigérateur. Jusqu’à 3 mois au congélateur."></div><button class="btn" type="submit" style="width:100%">Enregistrer la recette</button></form>`)}
