@@ -1,4 +1,4 @@
-const CACHE = 'mon-batch-v8-20261103';
+const CACHE = 'mon-batch-v9-20261104';
 const APP_FILES = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', event => {
@@ -26,17 +26,16 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin || !url.href.startsWith(self.registration.scope)) return;
 
   const path = url.pathname.toLowerCase();
-  const refreshFromNetwork = request.mode === 'navigate' ||
+  const appShell = request.mode === 'navigate' ||
     path.endsWith('/index.html') ||
     path.endsWith('/service-worker.js') ||
     path.endsWith('/manifest.json');
 
   event.respondWith((async () => {
     const cache = await caches.open(CACHE);
-    if (refreshFromNetwork) {
+    if (appShell) {
       try {
-        const freshRequest = new Request(request, { cache: 'no-store' });
-        const response = await fetch(freshRequest);
+        const response = await fetch(new Request(request, {cache: 'no-store'}));
         if (response && response.ok && !path.endsWith('/service-worker.js')) {
           await cache.put(request, response.clone());
         }
@@ -47,7 +46,6 @@ self.addEventListener('fetch', event => {
           Response.error();
       }
     }
-
     const cached = await cache.match(request);
     if (cached) return cached;
     try {
