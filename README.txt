@@ -1,17 +1,17 @@
-MON BATCH — VERSION AVEC VISUELS CORRIGÉS
+MON BATCH — version avec recherche améliorée
 
-CE QUI CHANGE
-- Les photos génériques qui ne correspondaient pas toujours aux plats ont été retirées du catalogue.
-- Chaque recette intégrée au catalogue affiche maintenant son emoji de recette, pour éviter toute confusion sur le plat représenté.
-- Les photos que tu ajoutes toi-même à tes recettes personnelles restent prises en charge.
-- Le reste de l’application est inchangé : catalogue, favoris, ajout de recettes, réglages par personnes et jours, mode cuisine et liste de courses.
-- Le cache est renouvelé pour que l’iPhone charge cette version.
+CONTENU (5 fichiers)
+- index.html : application complète, catalogue, recherche, recettes, courses et mode cuisine.
+- manifest.json : configuration installable PWA.
+- service-worker.js : mise en cache hors-ligne (cache renouvelé pour charger cette version).
+- icon.svg : icône de l'application.
+- README.txt : ces instructions.
 
-IMPORTATION
-1. Décompresse cette archive.
-2. Importe les 5 fichiers à la racine de ton dépôt GitHub : index.html, manifest.json, service-worker.js, icon.svg et README.txt.
-3. Attends que GitHub Pages termine le déploiement.
-4. Ouvre l’adresse du site dans Safari et actualise. Ferme ensuite complètement l’application installée sur l’écran d’accueil et relance-la.
+RECHERCHE DANS LES RECETTES
+Dans l'onglet Recettes, la barre « Rechercher dans les plats » filtre les recettes par nom, catégorie, ingrédients et étapes. La recherche ignore les accents et les petits mots courants. Exemples : « poulet miso brocoli riz », « miso », « brocoli » ou « riz ».
 
-Les emojis servent de repères visuels, sans prétendre être des photos des plats. Les photos que tu ajoutes à tes recettes personnelles restent affichées.
-Les recettes et favoris enregistrés localement sont conservés. Les réglages de batch par personne et par jour restent disponibles.
+MISE À JOUR
+Remplace les 5 anciens fichiers par ceux de cette archive à la racine du dépôt GitHub Pages. Attends la fin du déploiement. Sur iPhone, ferme complètement l'application puis rouvre-la ; le nouveau cache service worker est prévu pour actualiser l'interface.
+
+DONNÉES
+Les recettes ajoutées, favoris, sélections et cases cochées sont enregistrés dans le stockage local du navigateur. Ne supprime pas les données du site dans les réglages du navigateur.
